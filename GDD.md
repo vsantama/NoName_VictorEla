@@ -2,20 +2,21 @@
 v0.1 - by Víctor & Ela 
 13 Feb 2020
 
-## Description
+## 1. Description
 Our game is a Mario-type scroller game (that doesn't automatically scroll), where you control a character escaping a monster
 following them from the side of the screen.
+
 Apart from that, there are other enemies and obstacles that you either have to avoid or defeat by completing mini-puzzles.
 The objective is to last as long as possible alive.     
 
-2. ## Scope & Target Audience</h2>
+## 2. Scope & Target Audience</h2>
 
- Our target audience is a young audience, with an age range of 14 to 30 year old.
+Our target audience is a young audience, with an age range of 14 to 30 year old.
             
-3. ## Game Style</h2>
+## 3. Game Style</h2>
 
             
-4. ## Game content</h2>
+## 4. Game content</h2>
             
 ### 4.1 Levels
 
@@ -41,8 +42,8 @@ boulders, silver boulders and gold boulders. The more valuable the material is, 
 
 Rocks fall from the ceiling, and remove some life points if they hit your character. To avoid this you must move your character to dodge them.   
 
-### 4.4 Other elements</h3>
+### 4.4 Other elements
 
 As you move along the scrolling map you'll find different powerups.   
                     
-5. ## Mechanics and Gameplay
+## 5. Mechanics and Gameplay
