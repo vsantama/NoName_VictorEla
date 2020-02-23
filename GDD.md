@@ -1,4 +1,4 @@
-# GDD No Name
+# GDD Tibu-run
 v0.1 - by Víctor & Ela 
 13 Feb 2020
 
@@ -49,7 +49,7 @@ There are three main obstacles: small enemies, boulders and rocks.
 **Boulders** are similar to small enemies, but don't attack you. There are three types: bronze
 boulders, silver boulders and gold boulders. The more valuable the material is, the more puzzles you have to complete to destroy the boulder. 
 
-**Rocks** fall from the ceiling, and remove some life points if they hit your character. To avoid this you must move your character to dodge them.   
+**Rocks** fall from the ceiling, and remove some life points if they hit your character. To avoid this you must move your character to dodge them. There are also rocks on the ground, which you must jump over.  
 
 ### 4.5 Other elements
 
