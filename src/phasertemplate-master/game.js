@@ -3,11 +3,11 @@ export default class Game extends Phaser.Scene {
     super({ key: 'main' });
   }
   preload() {  
+  }//images, sprites, etc
+
+  create() {//"poner las cosas"
   }
 
-  create() {
-  }
-
-  update(time, delta) {    
+  update(time, delta) {    //interactions
   }
 }
