@@ -1,0 +1,5 @@
+En el salto, el perro empieza unos 
+píxeles más abajo, si esto afecta
+a la hora de programar se notará:
+PONER PERRO A LA ALTURA DEL DEL SALTO
+EN LOS DOS DE CORRER
