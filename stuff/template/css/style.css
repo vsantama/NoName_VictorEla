@@ -120,7 +120,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .nav-menu a:hover, .nav-menu .active > a, .nav-menu li:hover > a {
-  color: #017060;
+  color: #33ccff;
   text-decoration: none;
 }
 
@@ -408,7 +408,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #hero .carousel-indicators .active {
-  background-color: #1bbca3;
+  background-color: #33ccff;
 }
 
 #hero .btn-get-started {
@@ -858,11 +858,11 @@ section {
 }
 
 @media (max-width: 992px) {
-  .info-box {
-    /* img {
+  /*.info-box {
+     img {
       padding-top: 30px;
-    } */
-  }
+    } 
+  }*/
   .info-box .content {
     padding-top: 30px;
   }
@@ -1258,7 +1258,7 @@ section {
 }
 
 #footer .footer-top {
-  background: #3d4f4c;
+  background: #e0f7ff;
   border-bottom: 1px solid #4d635f;
   padding: 60px 0 30px 0;
 }
@@ -1280,14 +1280,14 @@ section {
   line-height: 24px;
   margin-bottom: 0;
   font-family: "Roboto", sans-serif;
-  color: #fff;
+  color: #000;
 }
 
 #footer .footer-top .social-links a {
   font-size: 18px;
   display: inline-block;
   background: #58716d;
-  color: #fff;
+  color: #000;
   line-height: 1;
   padding: 8px 0;
   margin-right: 4px;
@@ -1300,14 +1300,14 @@ section {
 
 #footer .footer-top .social-links a:hover {
   background: #1bbca3;
-  color: #fff;
+  color: #000;
   text-decoration: none;
 }
 
 #footer .footer-top h4 {
   font-size: 16px;
   font-weight: 600;
-  color: #fff;
+  color: #000;
   position: relative;
   padding-bottom: 12px;
 }
@@ -1324,7 +1324,7 @@ section {
 
 #footer .footer-top .footer-links ul i {
   padding-right: 2px;
-  color: #56e7d0;
+  color: #33ccff;
   font-size: 18px;
   line-height: 1;
 }
@@ -1340,19 +1340,19 @@ section {
 }
 
 #footer .footer-top .footer-links ul a {
-  color: #fff;
+  color: #0d0086;
   transition: 0.3s;
   display: inline-block;
   line-height: 1;
 }
 
 #footer .footer-top .footer-links ul a:hover {
-  color: #40e4ca;
+  color: #33ccff;
 }
 
 #footer .footer-top .footer-newsletter form {
   margin-top: 30px;
-  background: #fff;
+  background: #000;
   padding: 6px 10px;
   position: relative;
   border-radius: 4;
@@ -1392,5 +1392,5 @@ section {
   padding-top: 10px;
   text-align: center;
   font-size: 13px;
-  color: #fff;
+  color: #000;
 }
