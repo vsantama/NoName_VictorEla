@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="/stuff/img/Assets/Sprites/characters_enemies/finn.png" type="image/png" />
     <meta name="viewport" content="width=device-width, initial-scale=2.0">
-    <link rel="stylesheet" href="game.css">
+    <link rel="stylesheet" href="/stuff/css/game.css">
     <script src="/stuff/js/phaser.min.js"></script>
 
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -35,7 +35,9 @@
     <h1>Game attempt</h1>
     <script type="module">
         import Game from '/game.js'; 
-
+        //import HowToPlay from '/stuff/js/howto.js';
+        import Menu from '/stuff/js/menu.js';
+        import TitleScreen from '/stuff/js/titleScreen.js';
         var config = {
             type: Phaser.AUTO,
             width: 1400,
@@ -48,7 +50,7 @@
                 mode: Phaser.Scale.FIT,
                 autoCenter: Phaser.Scale.CENTER_BOTH
             },
-            scene: [ Game ],
+            scene: [ TitleScreen, Menu, Game ],
             physics: { default: 'arcade', arcade: { gravity: { y: 0 }, debug: false } }
         };
         new Phaser.Game(config);

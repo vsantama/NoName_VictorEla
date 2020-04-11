@@ -1,6 +1,6 @@
 export default class Game extends Phaser.Scene {
   constructor() {
-    super({ key: 'main' });
+    super({ key: 'game' });
   }
   preload() {  
     this.load.image('front_shiba', '/stuff/img/Assets/Sprites/boulder.png')
