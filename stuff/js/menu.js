@@ -22,8 +22,9 @@ export default class Menu extends Phaser.Scene {
             })
         });
 
-        this.sound.pauseOnBlur = false;
-        //this.sound.play('joke', {loop: true});
+        this.music = this.sound.add('beach');
+        this.music.play({volume: 0.6, loop: true});
+        this.music.pauseOnBlur = false; //make it sound when outside tha game tab
 
         this.add.sprite(700,400, 'bg').play("bganim");
 
@@ -63,7 +64,8 @@ export default class Menu extends Phaser.Scene {
 
         buttonhow.on("pointerup", ()=>{
             buttonhow.setFrame(1);
-            //this.scene.start('howto');
+            this.music.stop();
+            this.scene.start('howto');
         })
 
         var buttonset = this.add.sprite(400, 600, 'settings', );
@@ -82,6 +84,7 @@ export default class Menu extends Phaser.Scene {
 
         buttonset.on("pointerup", ()=>{
             buttonset.setFrame(1);
+            //this.music.stop();
             //this.scene.start('settings');
         })
 
@@ -101,7 +104,8 @@ export default class Menu extends Phaser.Scene {
 
         buttonchar.on("pointerup", ()=>{
             buttonchar.setFrame(1);
-            //this.scene.start('char_select');
+            this.music.stop();
+            this.scene.start('char');
         })
     }
 

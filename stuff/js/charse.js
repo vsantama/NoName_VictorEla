@@ -1,15 +1,14 @@
-export default class Menu extends Phaser.Scene {
+export default class CharSel extends Phaser.Scene {
     constructor(){
-        super({key: 'howto'});
+        super({key: 'char'});
     }
     preload(){
         this.load.spritesheet('bg', '/stuff/img/Assets/TitleScreenAndSprites/background.png', {frameWidth:1400, frameHeight:800});
         this.load.spritesheet('b2m', '/stuff/img/Assets/TitleScreenAndSprites/Buttons/back2menu.png', {frameWidth:111, frameHeight:20});
         this.load.image('sign', '/stuff/img/Assets/Sprites/woodframe.png');
-        this.load.spritesheet('arrowr', '/stuff/img/Assets/TitleScreenAndSprites/Buttons/arrow_right.png', {frameWidth:9, frameHeight:7});
-        this.load.spritesheet('arrowl', '/stuff/img/Assets/TitleScreenAndSprites/Buttons/arrow_left.png', {frameWidth:9, frameHeight:7});
         this.load.audio('transition', '/stuff/img/Assets/Sounds/Sound_FX/choose_menu_general_sound_3.mp3');
         this.load.audio('beach', '/stuff/img/Assets/Sounds/Sound_FX/beach.mp3');
+        this.load.spritesheet('shiba', '/stuff/img/Assets/Sprites/characters_enemies/shiba/shiba_panting.png', {frameWidth:123, frameHeight:172});
     }
     
     create(){
@@ -23,19 +22,10 @@ export default class Menu extends Phaser.Scene {
         });
 
         this.anims.create({
-            key: "lanim",
+            key: "shibanim",
             frameRate: 8,
             repeat: -1,
-            frames: this.anims.generateFrameNumbers("arrowl", {
-                frames: [0,1,2,3]
-            })
-        });
-
-        this.anims.create({
-            key: "ranim",
-            frameRate: 8,
-            repeat: -1,
-            frames: this.anims.generateFrameNumbers("arrowr", {
+            frames: this.anims.generateFrameNumbers("shiba", {
                 frames: [0,1,2,3]
             })
         });
@@ -45,18 +35,14 @@ export default class Menu extends Phaser.Scene {
         buttonback.setScale(4);
         var sign = this.add.image(700,400, 'sign');
         sign.setScale(12);
-        var left = this.add.sprite(180, 400, 'arrowl');
-        left.setScale(10);
-        left.setVisible(false);
-        var right = this.add.sprite(1220, 400, 'arrowr');
-        right.setScale(10);
+        var shiba = this.add.sprite(450,400, 'shiba');
+        shiba.setScale(1.2);
         this.music = this.sound.add('beach');
         this.music.play({volume: 0.6, loop: true});
         this.music.pauseOnBlur = false;
 
-        right.setInteractive();
-        left.setInteractive();
         buttonback.setInteractive();
+        shiba.setInteractive();
 
         buttonback.on("pointerover", ()=>{
             buttonback.setFrame(1);
@@ -73,36 +59,19 @@ export default class Menu extends Phaser.Scene {
             this.scene.start('menu');
         })
 
-        left.on("pointerover", ()=>{
-            left.play("lanim");
+        shiba.on("pointerover", ()=>{
+            shiba.play("shibanim");
+            //this.sound.play('transition', {volume: 0.6, loop: false});
         })
 
-        left.on("pointerout", ()=>{
-            left.setFrame(0);
-            left.anims.stop(null, true);
+        shiba.on("pointerout", ()=>{
+            shiba.setFrame(0);
+            shiba.anims.stop(null, true);
         })
 
-        left.on("pointerup", ()=>{
-            left.setFrame(0);
-            left.anims.stop(null, true);
-            right.setVisible(true);
-            left.setVisible(false);
-        })
-
-        right.on("pointerover", ()=>{
-            right.play("ranim");
-        })
-
-        right.on("pointerout", ()=>{
-            right.setFrame(0);
-            right.anims.stop(null, true);
-        })
-
-        right.on("pointerup", ()=>{
-            right.setFrame(0);
-            right.anims.stop(null, true);
-            left.setVisible(true);
-            right.setVisible(false);
+        shiba.on("pointerup", ()=>{
+            shiba.setFrame(1);
+            
         })
     }
 }

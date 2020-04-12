@@ -29,7 +29,8 @@ export default class TitleScreen extends Phaser.Scene {
         });
 
         this.music = this.sound.add('beach');
-        this.music.play();
+        this.music.play({volume: 0.6, loop:true});
+        this.music.pauseOnBlur = false;
 
         this.add.sprite(700,400, 'bg').play("bganim");
         var text = this.add.sprite(700,400,'text').play("textanim");
