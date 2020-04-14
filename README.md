@@ -5,7 +5,7 @@
 >Proyect name:  Tibu-Run  
 Version:   alpha - v0.1  
 Authors:  Víctor Santamaría, Ela Shepherd  
-License:   [MIT](https://github.com/vsantama/NoName_VictorEla/License.md)  
+License:   [MIT](https://github.com/vsantama/NoName_VictorEla/blob/master/License)  
 ## Destription:
 >Here goes a basic description
 
