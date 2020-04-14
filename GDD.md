@@ -1,6 +1,6 @@
 # GDD Tibu-run
-v0.1 - by Víctor & Ela 
-13 Feb 2020
+v1.1 - by Víctor & Ela 
+April 2020
 
 ## 1. Description
 Our game is a Mario-type scroller game (that doesn't automatically scroll), where you control a character escaping a monster
