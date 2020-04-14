@@ -535,9 +535,9 @@ section {
 
 .about .progress-bar {
   width: 1px;
-  height: 10px;
-  transition: .9s;
-  background-color: #1bbca3;
+  height: 5px;
+  transition: 2s;
+  background-color: #33ccff;
 }
 
 /*--------------------------------------------------------------

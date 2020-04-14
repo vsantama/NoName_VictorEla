@@ -36,7 +36,7 @@ export default class CharSel extends Phaser.Scene {
         var sign = this.add.image(700,400, 'sign');
         sign.setScale(12);
         var shiba = this.add.sprite(450,400, 'shiba');
-        shiba.setScale(1.2);
+        shiba.setScale(1.5);
         this.music = this.sound.add('beach');
         this.music.play({volume: 0.6, loop: true});
         this.music.pauseOnBlur = false;
