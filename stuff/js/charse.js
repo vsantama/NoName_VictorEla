@@ -3,12 +3,12 @@ export default class CharSel extends Phaser.Scene {
         super({key: 'char'});
     }
     preload(){
-        this.load.spritesheet('bg', '/stuff/img/Assets/TitleScreenAndSprites/background.png', {frameWidth:1400, frameHeight:800});
-        this.load.spritesheet('b2m', '/stuff/img/Assets/TitleScreenAndSprites/Buttons/back2menu.png', {frameWidth:111, frameHeight:20});
-        this.load.image('sign', '/stuff/img/Assets/Sprites/woodframe.png');
-        this.load.audio('transition', '/stuff/img/Assets/Sounds/Sound_FX/choose_menu_general_sound_3.mp3');
-        this.load.audio('beach', '/stuff/img/Assets/Sounds/Sound_FX/beach.mp3');
-        this.load.spritesheet('shiba', '/stuff/img/Assets/Sprites/characters_enemies/shiba/shiba_panting.png', {frameWidth:123, frameHeight:172});
+        this.load.spritesheet('bg', './stuff/img/Assets/TitleScreenAndSprites/background.png', {frameWidth:1400, frameHeight:800});
+        this.load.spritesheet('b2m', './stuff/img/Assets/TitleScreenAndSprites/Buttons/back2menu.png', {frameWidth:111, frameHeight:20});
+        this.load.image('sign', './stuff/img/Assets/Sprites/woodframe.png');
+        this.load.audio('transition', './stuff/img/Assets/Sounds/Sound_FX/choose_menu_general_sound_3.mp3');
+        this.load.audio('beach', './stuff/img/Assets/Sounds/Sound_FX/beach.mp3');
+        this.load.spritesheet('shiba', './stuff/img/Assets/Sprites/characters_enemies/shiba/shiba_panting.png', {frameWidth:123, frameHeight:172});
     }
     
     create(){
@@ -61,7 +61,6 @@ export default class CharSel extends Phaser.Scene {
 
         shiba.on("pointerover", ()=>{
             shiba.play("shibanim");
-            //this.sound.play('transition', {volume: 0.6, loop: false});
         })
 
         shiba.on("pointerout", ()=>{

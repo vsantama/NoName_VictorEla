@@ -3,9 +3,9 @@ export default class TitleScreen extends Phaser.Scene {
         super({key: 'title'});
     }
     preload(){
-        this.load.spritesheet('bg', '/stuff/img/Assets/TitleScreenAndSprites/background.png', {frameWidth:1400, frameHeight:800});
-        this.load.spritesheet('text', '/stuff/img/Assets/TitleScreenAndSprites/title_screen.png', {frameWidth:288, frameHeight:192});
-        this.load.audio('beach', '/stuff/img/Assets/Sounds/Sound_FX/beach.mp3');
+        this.load.spritesheet('bg', './stuff/img/Assets/TitleScreenAndSprites/background.png', {frameWidth:1400, frameHeight:800});
+        this.load.spritesheet('text', './stuff/img/Assets/TitleScreenAndSprites/title_screen.png', {frameWidth:288, frameHeight:192});
+        this.load.audio('beach', './stuff/img/Assets/Sounds/Sound_FX/beach.mp3');
         
     }
     

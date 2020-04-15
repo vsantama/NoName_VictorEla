@@ -3,14 +3,14 @@ export default class Menu extends Phaser.Scene {
         super({key: 'menu'});
     }
     preload(){
-        this.load.spritesheet('play_game', '/stuff/img/Assets/TitleScreenAndSprites/Buttons/play_game.png', {frameWidth:85, frameHeight:20});
-        this.load.spritesheet('howto', '/stuff/img/Assets/TitleScreenAndSprites/Buttons/how_to_play.png', {frameWidth:99, frameHeight:20});
-        this.load.spritesheet('settings', '/stuff/img/Assets/TitleScreenAndSprites/Buttons/settings.png', {frameWidth:82, frameHeight:20});
-        this.load.spritesheet('charse', '/stuff/img/Assets/TitleScreenAndSprites/Buttons/char_select.png', {frameWidth:150, frameHeight:20});
-        this.load.spritesheet('bg', '/stuff/img/Assets/TitleScreenAndSprites/background.png', {frameWidth:1400, frameHeight:800});
-        this.load.audio('beach', '/stuff/img/Assets/Sounds/Sound_FX/beach.mp3');
-        this.load.audio('joke', '/stuff/img/Assets/Sounds/Sound_FX/robotlady.mp3');
-        this.load.audio('transition', '/stuff/img/Assets/Sounds/Sound_FX/choose_menu_general_sound_3.mp3');
+        this.load.spritesheet('play_game', './stuff/img/Assets/TitleScreenAndSprites/Buttons/play_game.png', {frameWidth:85, frameHeight:20});
+        this.load.spritesheet('howto', './stuff/img/Assets/TitleScreenAndSprites/Buttons/how_to_play.png', {frameWidth:99, frameHeight:20});
+        this.load.spritesheet('settings', './stuff/img/Assets/TitleScreenAndSprites/Buttons/settings.png', {frameWidth:82, frameHeight:20});
+        this.load.spritesheet('charse', './stuff/img/Assets/TitleScreenAndSprites/Buttons/char_select.png', {frameWidth:150, frameHeight:20});
+        this.load.spritesheet('bg', './stuff/img/Assets/TitleScreenAndSprites/background.png', {frameWidth:1400, frameHeight:800});
+        this.load.audio('beach', './stuff/img/Assets/Sounds/Sound_FX/beach.mp3');
+        this.load.audio('joke', './stuff/img/Assets/Sounds/Sound_FX/robotlady.mp3');
+        this.load.audio('transition', './stuff/img/Assets/Sounds/Sound_FX/choose_menu_general_sound_3.mp3');
     }
     create(){
         this.anims.create({

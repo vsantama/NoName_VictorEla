@@ -3,13 +3,13 @@ export default class Menu extends Phaser.Scene {
         super({key: 'howto'});
     }
     preload(){
-        this.load.spritesheet('bg', '/stuff/img/Assets/TitleScreenAndSprites/background.png', {frameWidth:1400, frameHeight:800});
-        this.load.spritesheet('b2m', '/stuff/img/Assets/TitleScreenAndSprites/Buttons/back2menu.png', {frameWidth:111, frameHeight:20});
-        this.load.image('sign', '/stuff/img/Assets/Sprites/woodframe.png');
-        this.load.spritesheet('arrowr', '/stuff/img/Assets/TitleScreenAndSprites/Buttons/arrow_right.png', {frameWidth:9, frameHeight:7});
-        this.load.spritesheet('arrowl', '/stuff/img/Assets/TitleScreenAndSprites/Buttons/arrow_left.png', {frameWidth:9, frameHeight:7});
-        this.load.audio('transition', '/stuff/img/Assets/Sounds/Sound_FX/choose_menu_general_sound_3.mp3');
-        this.load.audio('beach', '/stuff/img/Assets/Sounds/Sound_FX/beach.mp3');
+        this.load.spritesheet('bg', './stuff/img/Assets/TitleScreenAndSprites/background.png', {frameWidth:1400, frameHeight:800});
+        this.load.spritesheet('b2m', './stuff/img/Assets/TitleScreenAndSprites/Buttons/back2menu.png', {frameWidth:111, frameHeight:20});
+        this.load.image('sign', './stuff/img/Assets/Sprites/woodframe.png');
+        this.load.spritesheet('arrowr', './stuff/img/Assets/TitleScreenAndSprites/Buttons/arrow_right.png', {frameWidth:9, frameHeight:7});
+        this.load.spritesheet('arrowl', './stuff/img/Assets/TitleScreenAndSprites/Buttons/arrow_left.png', {frameWidth:9, frameHeight:7});
+        this.load.audio('transition', './stuff/img/Assets/Sounds/Sound_FX/choose_menu_general_sound_3.mp3');
+        this.load.audio('beach', './stuff/img/Assets/Sounds/Sound_FX/beach.mp3');
     }
     
     create(){
