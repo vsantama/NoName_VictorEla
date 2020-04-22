@@ -50,9 +50,6 @@ export default class Menu extends Phaser.Scene {
         left.setVisible(false);
         var right = this.add.sprite(1220, 400, 'arrowr');
         right.setScale(10);
-        this.music = this.sound.add('beach');
-        this.music.play({volume: 0.6, loop: true});
-        this.music.pauseOnBlur = false;
 
         right.setInteractive();
         left.setInteractive();
@@ -69,8 +66,7 @@ export default class Menu extends Phaser.Scene {
 
         buttonback.on("pointerup", ()=>{
             buttonback.setFrame(1);
-            this.music.stop();
-            this.scene.start('menu');
+            this.scene.start('menu', {music: true});
         })
 
         left.on("pointerover", ()=>{

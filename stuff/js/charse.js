@@ -2,9 +2,15 @@ export default class CharSel extends Phaser.Scene {
     constructor(){
         super({key: 'char'});
     }
+
+    init (data){
+        this.char = data.char;
+    }
+
     preload(){
         this.load.spritesheet('bg', './stuff/img/Assets/TitleScreenAndSprites/background.png', {frameWidth:1400, frameHeight:800});
         this.load.spritesheet('b2m', './stuff/img/Assets/TitleScreenAndSprites/Buttons/back2menu.png', {frameWidth:111, frameHeight:20});
+        this.load.spritesheet('ken', './stuff/img/Assets/TitleScreenAndSprites/Buttons/ken_shiba.png', {frameWidth:37, frameHeight:20});
         this.load.image('sign', './stuff/img/Assets/Sprites/woodframe.png');
         this.load.audio('transition', './stuff/img/Assets/Sounds/Sound_FX/choose_menu_general_sound_3.mp3');
         this.load.audio('beach', './stuff/img/Assets/Sounds/Sound_FX/beach.mp3');
@@ -37,16 +43,19 @@ export default class CharSel extends Phaser.Scene {
         sign.setScale(12);
         var shiba = this.add.sprite(450,400, 'shiba');
         shiba.setScale(1.5);
-        this.music = this.sound.add('beach');
-        this.music.play({volume: 0.6, loop: true});
-        this.music.pauseOnBlur = false;
-
+        var shibaname = this.add.sprite(430,560, 'ken');
+        shibaname.setScale(4);
+        if (this.char == "shiba"){
+            shibaname.setFrame(1);
+        }
+        
         buttonback.setInteractive();
         shiba.setInteractive();
 
         buttonback.on("pointerover", ()=>{
             buttonback.setFrame(1);
             this.sound.play('transition', {volume: 0.6, loop: false});
+            console.log(this.char);
         })
 
         buttonback.on("pointerout", ()=>{
@@ -55,8 +64,7 @@ export default class CharSel extends Phaser.Scene {
 
         buttonback.on("pointerup", ()=>{
             buttonback.setFrame(1);
-            this.music.stop();
-            this.scene.start('menu');
+            this.scene.start('menu', {music: true, char: this.char});
         })
 
         shiba.on("pointerover", ()=>{
@@ -70,7 +78,7 @@ export default class CharSel extends Phaser.Scene {
 
         shiba.on("pointerup", ()=>{
             shiba.setFrame(1);
-            
+            this.char = "shiba";
         })
     }
 }

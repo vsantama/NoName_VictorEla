@@ -6,7 +6,6 @@ export default class TitleScreen extends Phaser.Scene {
         this.load.spritesheet('bg', './stuff/img/Assets/TitleScreenAndSprites/background.png', {frameWidth:1400, frameHeight:800});
         this.load.spritesheet('text', './stuff/img/Assets/TitleScreenAndSprites/title_screen.png', {frameWidth:288, frameHeight:192});
         this.load.audio('beach', './stuff/img/Assets/Sounds/Sound_FX/beach.mp3');
-        
     }
     
     create(){
@@ -43,7 +42,7 @@ export default class TitleScreen extends Phaser.Scene {
     update(time, delta){
         if (Phaser.Input.Keyboard.JustDown(this.enter)) {
             this.music.stop();
-            this.scene.start('menu');
+            this.scene.start('menu', {music: false, char: "shiba"});
         }
     }
 

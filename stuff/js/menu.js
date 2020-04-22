@@ -2,6 +2,17 @@ export default class Menu extends Phaser.Scene {
     constructor(){
         super({key: 'menu'});
     }
+
+    init (data){
+        if (data.music == false){
+            this.music = this.sound.add('beach');
+            this.music.play({volume: 0.6, loop: true});
+            //make it sound when outside tha game tab
+            this.music.pauseOnBlur = false;
+        }
+        this.char = data.char;
+    }
+
     preload(){
         this.load.spritesheet('play_game', './stuff/img/Assets/TitleScreenAndSprites/Buttons/play_game.png', {frameWidth:85, frameHeight:20});
         this.load.spritesheet('howto', './stuff/img/Assets/TitleScreenAndSprites/Buttons/how_to_play.png', {frameWidth:99, frameHeight:20});
@@ -13,6 +24,7 @@ export default class Menu extends Phaser.Scene {
         this.load.audio('transition', './stuff/img/Assets/Sounds/Sound_FX/choose_menu_general_sound_3.mp3');
     }
     create(){
+
         this.anims.create({
             key: "bganim",
             frameRate: 1,
@@ -21,10 +33,6 @@ export default class Menu extends Phaser.Scene {
                 frames: [0,1]
             })
         });
-
-        this.music = this.sound.add('beach');
-        this.music.play({volume: 0.6, loop: true});
-        this.music.pauseOnBlur = false; //make it sound when outside tha game tab
 
         this.add.sprite(700,400, 'bg').play("bganim");
 
@@ -64,7 +72,6 @@ export default class Menu extends Phaser.Scene {
 
         buttonhow.on("pointerup", ()=>{
             buttonhow.setFrame(1);
-            this.music.stop();
             this.scene.start('howto');
         })
 
@@ -84,7 +91,6 @@ export default class Menu extends Phaser.Scene {
 
         buttonset.on("pointerup", ()=>{
             buttonset.setFrame(1);
-            //this.music.stop();
             //this.scene.start('settings');
         })
 
@@ -104,8 +110,7 @@ export default class Menu extends Phaser.Scene {
 
         buttonchar.on("pointerup", ()=>{
             buttonchar.setFrame(1);
-            this.music.stop();
-            this.scene.start('char');
+            this.scene.start('char', {char: this.char});
         })
     }
 
