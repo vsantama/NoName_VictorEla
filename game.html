@@ -37,6 +37,7 @@
         import Game from './game.js'; 
         import HowToPlay from './stuff/js/howto.js';
         import Menu from './stuff/js/menu.js';
+        import Pause from './stuff/js/pause.js';
         import TitleScreen from './stuff/js/titleScreen.js';
         import CharSel from './stuff/js/charse.js';
         var config = {
@@ -51,7 +52,7 @@
                 mode: Phaser.Scale.FIT,
                 autoCenter: Phaser.Scale.CENTER_BOTH
             },
-            scene: [ TitleScreen, Menu, Game, HowToPlay, CharSel],
+            scene: [ TitleScreen, Menu, Game, HowToPlay, CharSel, Pause],
             physics: { default: 'arcade', arcade: { gravity: { y: 1000 }, debug: true } }
         };
         new Phaser.Game(config);

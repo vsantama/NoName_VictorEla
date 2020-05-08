@@ -7,13 +7,13 @@ export default class Game extends Phaser.Scene {
     this.char = data.char;
 }*/
   preload() {  
-    this.load.image('boulder', './stuff/img/Assets/Sprites/boulder2.png');
     this.load.image('clouds', './stuff/img/Assets/Backgrounds/clouds.png');
     this.load.image('sand', './stuff/img/Assets/Backgrounds/sand.png');
     this.load.image('sea', './stuff/img/Assets/Backgrounds/sea.png');
     this.load.spritesheet('shiba', './stuff/img/Assets/Sprites/characters_enemies/shiba/shiba.png', {frameWidth:150, frameHeight:208});
     this.load.tilemapTiledJSON('map1', './stuff/img/Assets/map1.json');
     this.load.image('sandtiles', './stuff/img/Assets/Backgrounds/sand.png')
+    this.load.image('stone', './stuff/img/Assets/Sprites/stone1_big.png');
   }//images, sprites, etc
 
   //getRandomArbitrary(min, max) {
@@ -21,14 +21,16 @@ export default class Game extends Phaser.Scene {
   //}
 
   create() {
+
   //MAPS
   this.map = this.make.tilemap({
     key: 'map1',
     tileWidth: 32,
     tileHeight: 32
   });
-  this.map.addTilesetImage('tiles', 'sandtiles');
-  this.groundLayer = this.map.createStaticLayer('ground', 'tiles');
+  this.map.addTilesetImage('rock_tile',  'stone');
+  this.map.addTilesetImage('beach_tileset',  'sandtiles');
+  this.groundLayer = this.map.createStaticLayer('ground', ['st_tiles', 'sand_tiles']);
   this.groundLayer.setCollisionByExclusion(-1, true);
 
    //Word groups. 84 words in each group
@@ -69,13 +71,12 @@ export default class Game extends Phaser.Scene {
   
    //doesnt work
    this.anims.create({
-     key: "run",
-     frameRate: 7,
-     repeat: -1,
-     frames: this.anims.generateFrameNumbers("shiba", {
-      frames: [0,1,2,3,4,5,6,7,8,9,10,11]
-        })
-   });
+    key: 'run',
+    frameRate: 7,
+    frames: this.anims.generateFrameNumbers("shiba", {
+     frames: [0,1,2,3,4,5,6,7,8,9,10,11]
+       })
+  });
 
    this.anims.create({
      key: 'jump',
@@ -110,27 +111,29 @@ export default class Game extends Phaser.Scene {
       // Para elegir un numero entre 0 y 84: var number =Math.floor(Math.random() * (84 - 0));
     
     if (this.cursors.left.isDown && this.player.x > 55) { 
-      this.player.play("run");   
-      this.player.x -= 5;
+      this.player.play("run", true);   
+      this.player.body.setVelocityX(-200);
       this.player.scaleX = -1;
       this.clouds.tilePositionX -= 0.5;
       this.sea.tilePositionX -= 1;
       this.sand.tilePositionX -= 2; 
 
     } else if (this.cursors.right.isDown && this.player.x < 3000) {
-      this.player.play("run");   
-      if (this.player.x < 700){
-      this.player.x += 5;
+      this.player.play("run", true);   
+      
+      this.player.body.setVelocityX(200);
+      if (this.player.x < 1000){
+        this.clouds.tilePositionX += 0.5;
+        this.sea.tilePositionX += 1;
+        this.sand.tilePositionX += 2; 
       this.player.scaleX = 1;
-      this.clouds.tilePositionX += 0.5;
-      this.sea.tilePositionX += 1;
-      this.sand.tilePositionX += 2; 
+      
     }
       else{
       this.player.scaleX = 1;
-      this.clouds.tilePositionX += 2;
-      this.sea.tilePositionX += 4;
-      this.sand.tilePositionX += 5; 
+      this.clouds.tilePositionX += 0.8;
+      this.sea.tilePositionX += 1.5;
+      this.sand.tilePositionX += 3; 
       }
       
     } 
@@ -138,6 +141,13 @@ export default class Game extends Phaser.Scene {
        this.player.body.setVelocityY(-400);
        this.player.play('jump', true);
      }
+
+     else if (this.cursors.down.isDown){
+      this.scene.launch('pause');
+      this.scene.pause();
+      
+    }
+
      else{
       this.player.body.setVelocityX(0);
       // Only show the idle animation if the player is footed
