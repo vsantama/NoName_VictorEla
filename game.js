@@ -67,6 +67,7 @@ export default class Game extends Phaser.Scene {
    this.player.body.setCollideWorldBounds(true);
    this.physics.add.collider(this.player, this.groundLayer);
   
+   //doesnt work
    this.anims.create({
      key: "run",
      frameRate: 7,
