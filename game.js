@@ -16,10 +16,6 @@ export default class Game extends Phaser.Scene {
     this.load.image('stone', './stuff/img/Assets/Sprites/stone1_big.png');
   }//images, sprites, etc
 
-  //getRandomArbitrary(min, max) {
-  //  return Math.random() * (max - min) + min;
-  //}
-
   create() {
 
   //MAPS
@@ -32,31 +28,6 @@ export default class Game extends Phaser.Scene {
   this.map.addTilesetImage('beach_tileset',  'sandtiles');
   this.groundLayer = this.map.createStaticLayer('ground', ['st_tiles', 'sand_tiles']);
   this.groundLayer.setCollisionByExclusion(-1, true);
-
-   //Word groups. 84 words in each group
-   this.easyWords = ['act','bay','cut','dry','era','few','gym','hit','hot','ice','job','kid','log','may','new','one','pro',
-   'red','sis','tea','use','blog','boat','crew','data','diner','eyes','else','film',
-   'feed','feet','gold','grew','hall','hill','into','iron','join','jump','king','knew','know','lion','like','moon','menu',
-   'none','note','null','over','open','post','pool','tiny','tips','user','upon','visa',
-   'vast','walk','weak','yard','year','zack','asset','birds','catch','drink','eight','fifth','games','happy','juice','knife',
-   'label','mount','night','occur','panel','queen','range','ships','thick','usage']
-   this.mediumWords = ['agency','backup','crisis','figure','growth','joined','launch',
-   'method','powder','affairs','average','disease','fashion','foreign','greatly','minimum','ongoing','analyst','bringing',
-   'checking','eligible','directed','equipped','moment','reaction','straight','vacation','warranty','surprise','whatever',
-   'internet','mountain','favourite','negative','election','division','calendar','action','friction','fiction','glorious',
-   'homepage','lonely','monitor','secret','account','balance','capital','causing','brother','sister','factory','extreme',
-   'sports','formula','initial','massive','located','tigers','picture','plastic','related','regular','language','twitter',
-   'instagram','website','gravity','heating','soldier','skating','stating','vanilla','chocolate','coconut','cream','balloon',
-   'bananas','aquatic','caption','needles', 'painting', 'sharpen','backpack']
-   this.hardHords = ['acceptable','acquire','amateur','believe','conscience','column','conscious','definitely','drunkenness',
-   'embarrassment','equipment','exceed','fiery','guarantee','gauge','harass','hierarchy','humorous','ignorance','immediate',
-   'inoculate','jewelry','judgment','leisure','license','maintenance','miniature','maneuver','misspell','neighbor','noticeable',
-   'occasionally','pastime','perseverance','pronunciation','privilege','questionnaire','receipt','recommend','rhyme','rhythm',
-   'schedule','sergeant','threshold','twelfth','tyranny','vacuum','pharaoh','intelligence','handkerchief','necessary',
-   'hypothetically','pneumonia','abolitionism','mortgage','awareness','establish','following','frequency','ourselves','pregnancy',
-   'situation','somewhere','tradition','yesterday','addiction','wonderful','boyfriend','girlfriend','chemistry','mechanics',
-   'objective','offensive','qualified','reactions','replacing','targeting','testament','volunteer','warehouse','workplace',
-   'attractive','businesses','challenges']
 
    //BACKGROUND
    this.clouds = this.add.tileSprite(0, 400, 30000, 800, "clouds");
@@ -142,10 +113,10 @@ export default class Game extends Phaser.Scene {
        this.player.play('jump', true);
      }
 
+     //doesn't work
      else if (this.cursors.down.isDown){
+      this.scene.pause('game');
       this.scene.launch('pause');
-      this.scene.pause();
-      
     }
 
      else{

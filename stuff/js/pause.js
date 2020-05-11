@@ -10,6 +10,11 @@ export default class Pause extends Phaser.Scene {
     }
     
     create(){
+        this.veil = this.add.graphics({x: 0, y: 0});
+        this.veil.fillStyle('0x000000', 0.3);
+        this.veil.fillRect(0, 0, 1400, 800);
+        this.veil.setScrollFactor(0);
+
         var sign = this.add.image(700,400, 'sign');
         sign.setScale(12);
         var buttonback = this.add.sprite(700, 250, 'b2m', );
@@ -33,6 +38,7 @@ export default class Pause extends Phaser.Scene {
         buttonback.on("pointerup", ()=>{
             buttonback.setFrame(1);
             this.scene.stop("game");
+            this.scene.stop();
             this.scene.start('menu', {music: false});
         })
 
@@ -50,5 +56,10 @@ export default class Pause extends Phaser.Scene {
             this.scene.stop();
             this.scene.resume('game');
         })
+
+    }
+
+    update(time, delta){
+    
     }
 }

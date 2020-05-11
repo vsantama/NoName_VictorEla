@@ -40,6 +40,7 @@
         import Pause from './stuff/js/pause.js';
         import TitleScreen from './stuff/js/titleScreen.js';
         import CharSel from './stuff/js/charse.js';
+        import TypeScreen from './stuff/js/typing.js';
         var config = {
             type: Phaser.AUTO,
             width: 1400,
@@ -52,7 +53,7 @@
                 mode: Phaser.Scale.FIT,
                 autoCenter: Phaser.Scale.CENTER_BOTH
             },
-            scene: [ TitleScreen, Menu, Game, HowToPlay, CharSel, Pause],
+            scene: [ TitleScreen, Menu, Game, HowToPlay, CharSel, Pause, TypeScreen],
             physics: { default: 'arcade', arcade: { gravity: { y: 1000 }, debug: true } }
         };
         new Phaser.Game(config);
