@@ -11,29 +11,28 @@ export default class Game extends Phaser.Scene {
     this.load.image('sand', './stuff/img/Assets/Backgrounds/sand.png');
     this.load.image('sea', './stuff/img/Assets/Backgrounds/sea.png');
     this.load.spritesheet('shiba', './stuff/img/Assets/Sprites/characters_enemies/shiba/shiba.png', {frameWidth:150, frameHeight:208});
-    this.load.tilemapTiledJSON('map1', './stuff/img/Assets/map1.json');
-    this.load.image('sandtiles', './stuff/img/Assets/Backgrounds/sand.png')
-    this.load.image('stone', './stuff/img/Assets/Sprites/stone1_big.png');
+    this.load.image('sandtiles', './stuff/img/Assets/map/beach_tiles_52x36.png');
+    this.load.tilemapTiledJSON('map1', './stuff/img/Assets/map/map1.json');
+   // this.load.image('stone', './stuff/img/Assets/Sprites/stone1_big.png');
   }//images, sprites, etc
 
   create() {
-
-  //MAPS
-  this.map = this.make.tilemap({
-    key: 'map1',
-    tileWidth: 32,
-    tileHeight: 32
-  });
-  this.map.addTilesetImage('rock_tile',  'stone');
-  this.map.addTilesetImage('beach_tileset',  'sandtiles');
-  this.groundLayer = this.map.createStaticLayer('ground', ['st_tiles', 'sand_tiles']);
-  this.groundLayer.setCollisionByExclusion(-1, true);
 
    //BACKGROUND
    this.clouds = this.add.tileSprite(0, 400, 30000, 800, "clouds");
    this.sea = this.add.tileSprite(0, 400, 30000, 800, 'sea');
    this.sand = this.add.tileSprite(0, 400, 30000, 800, 'sand');
    
+    //MAPS
+  this.map = this.make.tilemap({
+    key: 'map1',
+    tileWidth: 52,
+    tileHeight: 36
+  });
+  this.map.addTilesetImage('beach_tiles_52x36',  'sandtiles');
+  this.groundLayer = this.map.createStaticLayer('ground', 'beach_tiles_52x36');
+  this.groundLayer.setCollisionByExclusion(-1, true);
+
    //PLAYER
    this.player = this.add.sprite(100, 500, "shiba");
    this.physics.add.existing(this.player);
@@ -84,7 +83,8 @@ export default class Game extends Phaser.Scene {
     if (this.cursors.left.isDown && this.player.x > 55) { 
       this.player.play("run", true);   
       this.player.body.setVelocityX(-200);
-      this.player.scaleX = -1;
+      //change this
+      this.player.scaleX = 1;
       this.clouds.tilePositionX -= 0.5;
       this.sea.tilePositionX -= 1;
       this.sand.tilePositionX -= 2; 
@@ -115,7 +115,6 @@ export default class Game extends Phaser.Scene {
 
      //doesn't work
      else if (this.cursors.down.isDown){
-      console.log("hi");
       this.scene.pause('game');
       this.scene.launch('pause');
     }
