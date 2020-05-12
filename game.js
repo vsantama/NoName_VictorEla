@@ -115,6 +115,7 @@ export default class Game extends Phaser.Scene {
 
      //doesn't work
      else if (this.cursors.down.isDown){
+      console.log("hi");
       this.scene.pause('game');
       this.scene.launch('pause');
     }
