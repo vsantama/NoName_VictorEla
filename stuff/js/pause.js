@@ -2,6 +2,13 @@ export default class Pause extends Phaser.Scene {
     constructor(){
         super({key: 'pause'});
     }
+
+    init (data){
+        this.lock = data.lock;
+        //must add char value when going to menu
+        //this.char = data.char;
+    }
+
     preload(){
         this.load.spritesheet('b2m', './stuff/img/Assets/TitleScreenAndSprites/Buttons/back2menu.png', {frameWidth:111, frameHeight:20});
         this.load.spritesheet('con', './stuff/img/Assets/TitleScreenAndSprites/Buttons/continue.png', {frameWidth:80, frameHeight:20});
@@ -39,7 +46,7 @@ export default class Pause extends Phaser.Scene {
             buttonback.setFrame(1);
             this.scene.stop("game");
             this.scene.stop();
-            this.scene.start('menu', {music: false});
+            this.scene.start('menu', {music: false, lock: this.lock});
         })
 
         buttoncont.on("pointerover", ()=>{
@@ -54,7 +61,7 @@ export default class Pause extends Phaser.Scene {
         buttoncont.on("pointerup", ()=>{
             buttoncont.setFrame(1);
             this.scene.stop();
-            this.scene.resume('game');
+            this.scene.resume('game', {lock: this.lock});
         })
 
     }

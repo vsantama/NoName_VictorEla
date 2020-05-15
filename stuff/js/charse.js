@@ -5,16 +5,19 @@ export default class CharSel extends Phaser.Scene {
 
     init (data){
         this.char = data.char;
+        this.lock = data.lock;
     }
 
     preload(){
         this.load.spritesheet('bg', './stuff/img/Assets/TitleScreenAndSprites/background.png', {frameWidth:1400, frameHeight:800});
         this.load.spritesheet('b2m', './stuff/img/Assets/TitleScreenAndSprites/Buttons/back2menu.png', {frameWidth:111, frameHeight:20});
         this.load.spritesheet('ken', './stuff/img/Assets/TitleScreenAndSprites/Buttons/ken_shiba.png', {frameWidth:37, frameHeight:20});
+        this.load.image('locked', './stuff/img/Assets/TitleScreenAndSprites/Buttons/locked.png');
         this.load.image('sign', './stuff/img/Assets/Sprites/woodframe.png');
         this.load.audio('transition', './stuff/img/Assets/Sounds/Sound_FX/choose_menu_general_sound_3.mp3');
         this.load.audio('beach', './stuff/img/Assets/Sounds/Sound_FX/beach.mp3');
-        this.load.spritesheet('shiba', './stuff/img/Assets/Sprites/characters_enemies/shiba/shiba_panting.png', {frameWidth:123, frameHeight:172});
+        this.load.spritesheet('shiba', './stuff/img/Assets/Sprites/characters_enemies/shiba/shiba_spritesheet.png', {frameWidth:126, frameHeight:194});
+
     }
     
     create(){
@@ -32,21 +35,32 @@ export default class CharSel extends Phaser.Scene {
             frameRate: 8,
             repeat: -1,
             frames: this.anims.generateFrameNumbers("shiba", {
-                frames: [0,1,2,3]
+                frames: [15,16,17,18]
             })
         });
 
         this.add.sprite(700,400, 'bg').play("bganim");
+
         var buttonback = this.add.sprite(250, 750, 'b2m', );
         buttonback.setScale(4);
+
         var sign = this.add.image(700,400, 'sign');
         sign.setScale(12);
-        var shiba = this.add.sprite(450,400, 'shiba');
+
+        var shiba = this.add.sprite(460,400, 'shiba');
         shiba.setScale(1.5);
-        var shibaname = this.add.sprite(430,560, 'ken');
-        shibaname.setScale(4);
-        if (this.char == "shiba"){
-            shibaname.setFrame(1);
+        shiba.setFrame(15);
+
+        this.shibaname = this.add.sprite(445,580, 'ken');
+        this.shibaname.setScale(4);
+
+        var locked = this.add.image(900, 580, 'locked');
+        locked.setScale(4);
+        if(this.lock){
+            locked.setVisible(true);
+        }
+        else{
+            locked.setVisible(false);
         }
         
         buttonback.setInteractive();
@@ -55,7 +69,6 @@ export default class CharSel extends Phaser.Scene {
         buttonback.on("pointerover", ()=>{
             buttonback.setFrame(1);
             this.sound.play('transition', {volume: 0.6, loop: false});
-            console.log(this.char);
         })
 
         buttonback.on("pointerout", ()=>{
@@ -64,7 +77,7 @@ export default class CharSel extends Phaser.Scene {
 
         buttonback.on("pointerup", ()=>{
             buttonback.setFrame(1);
-            this.scene.start('menu', {music: true, char: this.char});
+            this.scene.start('menu', {music: true, char: this.char, lock: this.lock});
         })
 
         shiba.on("pointerover", ()=>{
@@ -72,13 +85,26 @@ export default class CharSel extends Phaser.Scene {
         })
 
         shiba.on("pointerout", ()=>{
-            shiba.setFrame(0);
+            shiba.setFrame(15);
             shiba.anims.stop(null, true);
         })
 
         shiba.on("pointerup", ()=>{
-            shiba.setFrame(1);
+            shiba.setFrame(18);
             this.char = "shiba";
         })
+    }
+
+    update(time,delta){
+        if (this.char == "shiba"){
+            this.shibaname.setFrame(1);
+            /*this.otherdogname.setFrame(0)*/
+        }
+        /*
+        else{
+            this.shibaname.setFrame(0);
+            this.otherdogname.setFrame(1)
+        }
+        */
     }
 }

@@ -42,7 +42,7 @@ export default class TitleScreen extends Phaser.Scene {
     update(time, delta){
         if (Phaser.Input.Keyboard.JustDown(this.enter)) {
             this.music.stop();
-            this.scene.start('menu', {music: false, char: "shiba"});
+            this.scene.start('menu', {music: false, char: "shiba", lock: true});
         }
     }
 
