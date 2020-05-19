@@ -17,6 +17,7 @@ export default class CharSel extends Phaser.Scene {
         this.load.audio('transition', './stuff/img/Assets/Sounds/Sound_FX/choose_menu_general_sound_3.mp3');
         this.load.audio('beach', './stuff/img/Assets/Sounds/Sound_FX/beach.mp3');
         this.load.spritesheet('shiba', './stuff/img/Assets/Sprites/characters_enemies/shiba/shiba_spritesheet.png', {frameWidth:126, frameHeight:194});
+        this.load.image('locked_char', './stuff/img/Assets/Sprites/locked_character.png');
 
     }
     
@@ -55,12 +56,16 @@ export default class CharSel extends Phaser.Scene {
         this.shibaname.setScale(4);
 
         var locked = this.add.image(900, 580, 'locked');
+        var lockchar = this.add.image(900, 416, 'locked_char');
         locked.setScale(4);
+        lockchar.setScale(1.5);
         if(this.lock){
             locked.setVisible(true);
+            lockchar.setVisible(true);
         }
         else{
             locked.setVisible(false);
+            lockchar.setVisible(false);
         }
         
         buttonback.setInteractive();

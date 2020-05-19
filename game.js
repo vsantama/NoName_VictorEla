@@ -1,3 +1,5 @@
+//import FormUtil from './stuff/js/FormUtil.js'
+
 export default class Game extends Phaser.Scene {
   constructor() {
     super({ key: 'game' });
@@ -14,8 +16,8 @@ export default class Game extends Phaser.Scene {
     this.load.image('sea', './stuff/img/Assets/Backgrounds/sea.png');
     this.load.spritesheet('shiba', './stuff/img/Assets/Sprites/characters_enemies/shiba/shiba_spritesheet.png', {frameWidth:126, frameHeight:194});
     this.load.spritesheet('shiba_flip', './stuff/img/Assets/Sprites/characters_enemies/shiba/shiba_spritesheet_flipped.png', {frameWidth:126, frameHeight:194});
-    this.load.image('sandtiles', './stuff/img/Assets/map/beach_tiles_52x36.png');
-    this.load.tilemapTiledJSON('map1', './stuff/img/Assets/map/map1.json');
+    this.load.image('sandtiles', './stuff/img/Assets/map/beach_tiles_64x32.png');
+    this.load.tilemapTiledJSON('beach_light', './stuff/img/Assets/map/beach_light.json');
     this.load.audio('error', './stuff/img/Assets/Sounds/Sound_FX/error.mp3');
     this.load.audio('correct', './stuff/img/Assets/Sounds/Sound_FX/correct.mp3');
     this.load.audio('snake_dies', './stuff/img/Assets/Sounds/Sound_FX/snake_Hiss.mp3');
@@ -62,12 +64,12 @@ export default class Game extends Phaser.Scene {
    
     //MAPS
   this.map = this.make.tilemap({
-    key: 'map1',
-    tileWidth: 52,
-    tileHeight: 36
+    key: 'beach_light',
+    tileWidth: 64,
+    tileHeight: 32
   });
-  this.map.addTilesetImage('beach_tiles_52x36',  'sandtiles');
-  this.groundLayer = this.map.createStaticLayer('ground', 'beach_tiles_52x36');
+  this.map.addTilesetImage('beach_tiles_64x32',  'sandtiles');
+  this.groundLayer = this.map.createStaticLayer('ground', 'beach_tiles_64x32');
   this.groundLayer.setCollisionByExclusion(-1, true);
 
    //PLAYER
@@ -79,15 +81,15 @@ export default class Game extends Phaser.Scene {
    //doesnt work
    this.anims.create({
     key: 'run',
-    frameRate: 7,
+    frameRate: 10,
     frames: this.anims.generateFrameNumbers("shiba", {
      frames: [0,1,3,4,5,6,8,9,10,11]
        })
   });
-
+ 
   this.anims.create({
     key: 'run_flip',
-    frameRate: 7,
+    frameRate: 10,
     frames: this.anims.generateFrameNumbers("shiba_flip", {
      frames: [0,1,3,4,5,6,8,9,10,11]
        })
@@ -163,7 +165,11 @@ export default class Game extends Phaser.Scene {
       this.sea.tilePositionX -= 1;
       this.sand.tilePositionX -= 2; 
 
-    } else if (this.cursors.right.isDown && this.player.x < 3000) {
+      //wont move past 1337
+      //tried to make the map a power of 2, doesn't seem to change anything
+      //https://gamedevacademy.org/how-to-make-a-mario-style-platformer-with-phaser-3/?a=13
+      //https://gamedevacademy.org/how-to-make-an-infinitely-scrolling-game-with-phaser/
+    } else if (this.cursors.right.isDown) {
       this.player.play("run", true);   
       this.direction = 'right';
       this.player.body.setVelocityX(200);
@@ -184,6 +190,7 @@ export default class Game extends Phaser.Scene {
     } 
      else if ((this.cursors.space.isDown || this.cursors.up.isDown) && (this.player.body.onFloor())){
        this.player.body.setVelocityY(-400);
+       console.log(this.player.x);
        if (this.direction == 'right')  this.player.play('jump', true);
        else this.player.play('jump_flip', true);
        
