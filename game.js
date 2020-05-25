@@ -17,45 +17,15 @@ export default class Game extends Phaser.Scene {
     this.load.spritesheet('shiba', './stuff/img/Assets/Sprites/characters_enemies/shiba/shiba_spritesheet.png', {frameWidth:126, frameHeight:194});
     this.load.spritesheet('shiba_flip', './stuff/img/Assets/Sprites/characters_enemies/shiba/shiba_spritesheet_flipped.png', {frameWidth:126, frameHeight:194});
     this.load.image('sandtiles', './stuff/img/Assets/map/beach_tiles_64x32.png');
+    this.load.image('cop_boulder', './stuff/img/Assets/Sprites/bcopper_boulder.png');
     this.load.tilemapTiledJSON('beach_light', './stuff/img/Assets/map/beach_light.json');
-    this.load.audio('error', './stuff/img/Assets/Sounds/Sound_FX/error.mp3');
-    this.load.audio('correct', './stuff/img/Assets/Sounds/Sound_FX/correct.mp3');
     this.load.audio('snake_dies', './stuff/img/Assets/Sounds/Sound_FX/snake_Hiss.mp3');
     this.load.audio('snake_attack', './stuff/img/Assets/Sounds/Sound_FX/snake_attack.mp3');
   }//images, sprites, etc
-  
-  getRandomArbitrary(min, max) {
-    return Math.random() * (max - min) + min;
-}
 
   create() {
     //VARIABLES
     this.direction = 'right';
-
-    //Word groups. 84 words in each group
-    this.easyWords = ['act','bay','cut','dry','era','few','gym','hit','hot','ice','job','kid','log','may','new','one','pro',
-    'red','sis','tea','use','blog','boat','crew','data','diner','eyes','else','film',
-    'feed','feet','gold','grew','hall','hill','into','iron','join','jump','king','knew','know','lion','like','moon','menu',
-    'none','note','null','over','open','post','pool','tiny','tips','user','upon','visa',
-    'vast','walk','weak','yard','year','zack','asset','birds','catch','drink','eight','fifth','games','happy','juice','knife',
-    'label','mount','night','occur','panel','queen','range','ships','thick','done']
-    this.mediumWords = ['agency','backup','crisis','figure','growth','joined','launch',
-    'method','powder','affairs','average','disease','fashion','foreign','greatly','minimum','ongoing','analyst','bringing',
-    'checking','eligible','directed','equipped','moment','reaction','straight','vacation','warranty','surprise','whatever',
-    'internet','mountain','favourite','negative','election','division','calendar','action','friction','fiction','glorious',
-    'homepage','lonely','monitor','secret','account','balance','capital','causing','brother','sister','factory','extreme',
-    'sports','formula','initial','massive','located','tigers','picture','plastic','related','regular','language','twitter',
-    'instagram','website','gravity','heating','soldier','skating','stating','vanilla','chocolate','coconut','cream','balloon',
-    'bananas','aquatic','caption','needles', 'painting', 'sharpen','backpack']
-    this.hardHords = ['acceptable','acquire','amateur','believe','conscience','column','conscious','definitely','drunkenness',
-    'embarrassment','equipment','exceed','fiery','guarantee','gauge','harass','hierarchy','humorous','ignorance','immediate',
-    'inoculate','jewelry','judgment','leisure','license','maintenance','miniature','maneuver','misspell','neighbor','noticeable',
-    'occasionally','pastime','perseverance','pronunciation','privilege','questionnaire','receipt','recommend','rhyme','rhythm',
-    'schedule','sergeant','threshold','twelfth','tyranny','vacuum','pharaoh','intelligence','handkerchief','necessary',
-    'hypothetically','pneumonia','abolitionism','mortgage','awareness','establish','following','frequency','ourselves','pregnancy',
-    'situation','somewhere','tradition','yesterday','addiction','wonderful','boyfriend','girlfriend','chemistry','mechanics',
-    'objective','offensive','qualified','reactions','replacing','targeting','testament','volunteer','warehouse','workplace',
-    'attractive','businesses','challenges']
 
    //BACKGROUND
    this.clouds = this.add.tileSprite(0, 400, 30000, 800, "clouds");
@@ -72,11 +42,29 @@ export default class Game extends Phaser.Scene {
   this.groundLayer = this.map.createStaticLayer('ground', 'beach_tiles_64x32');
   this.groundLayer.setCollisionByExclusion(-1, true);
 
-   //PLAYER
+   //PLAYER                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
    this.player = this.add.sprite(100, 500, "shiba");
    this.physics.add.existing(this.player);
    this.player.body.setCollideWorldBounds(true);
+   this.player.myGame = this;
+   //this.player.lauched = false;
    this.physics.add.collider(this.player, this.groundLayer);
+   
+
+   //COLLLISION GROUPS
+   this.boulder = this.add.sprite(350, 570, "cop_boulder");
+   this.powerups = this.physics.add.staticGroup();
+   this.blockers = this.physics.add.staticGroup(); 
+   this.blockers.add(this.boulder);
+
+  //COLLISIONS
+  this.physics.add.collider(this.player, this.blockers, function(player, blocker){
+    this.launched = false;
+    if (this.launched == false){
+      player.myGame.scene.launch('typing', {lock: this.lock, dif: player.myGame.dif});
+      //Invalid Animation Key, or Key already in use:
+    }
+  });
   
    //doesnt work
    this.anims.create({
@@ -138,22 +126,13 @@ export default class Game extends Phaser.Scene {
    this.myCam.startFollow(this.player);
 
    this.cursors = this.input.keyboard.createCursorKeys();
+
   }
 
   update(time, delta) {
   
     //  WORD CHOOSING
-    this.word = "";
-    if (this.dif == 'easy'){
-      this.word = this.easyWords[Math.floor(this.getRandomArbitrary(0, 83))];
-    }
-    else if (this.dif == 'medium'){
-      this.word = this.mediumWords[Math.floor(this.getRandomArbitrary(0, 83))];
-    }
-
-    else if (this.dif == 'hard'){
-      this.word = this.hardWords[Math.floor(this.getRandomArbitrary(0, 83))];
-    }
+   
     //
     
     if (this.cursors.left.isDown && this.player.x > 55) { 
@@ -211,6 +190,7 @@ export default class Game extends Phaser.Scene {
         else this.player.play('idle_flip', true);
       }
      }
-     
+
+
   }    
 }
