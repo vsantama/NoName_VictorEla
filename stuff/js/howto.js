@@ -2,6 +2,12 @@ export default class Menu extends Phaser.Scene {
     constructor(){
         super({key: 'howto'});
     }
+
+    init (data){
+        this.char = data.char;
+        this.lock = data.lock;
+    }
+
     preload(){
         this.load.spritesheet('bg', './stuff/img/Assets/TitleScreenAndSprites/background.png', {frameWidth:1400, frameHeight:800});
         this.load.spritesheet('b2m', './stuff/img/Assets/TitleScreenAndSprites/Buttons/back2menu.png', {frameWidth:111, frameHeight:20});
@@ -66,7 +72,7 @@ export default class Menu extends Phaser.Scene {
 
         buttonback.on("pointerup", ()=>{
             buttonback.setFrame(1);
-            this.scene.start('menu', {music: true});
+            this.scene.start('menu', {music: true, lock: this.lock, char: this.char});
         })
 
         left.on("pointerover", ()=>{

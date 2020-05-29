@@ -13,6 +13,7 @@ export default class CharSel extends Phaser.Scene {
         this.load.spritesheet('b2m', './stuff/img/Assets/TitleScreenAndSprites/Buttons/back2menu.png', {frameWidth:111, frameHeight:20});
         this.load.spritesheet('ken', './stuff/img/Assets/TitleScreenAndSprites/Buttons/ken_shiba.png', {frameWidth:37, frameHeight:20});
         this.load.image('locked', './stuff/img/Assets/TitleScreenAndSprites/Buttons/locked.png');
+        this.load.image('choose', './stuff/img/Assets/TitleScreenAndSprites/Buttons/chooseyourch.png');
         this.load.image('sign', './stuff/img/Assets/Sprites/woodframe.png');
         this.load.audio('transition', './stuff/img/Assets/Sounds/Sound_FX/choose_menu_general_sound_3.mp3');
         this.load.audio('beach', './stuff/img/Assets/Sounds/Sound_FX/beach.mp3');
@@ -47,6 +48,8 @@ export default class CharSel extends Phaser.Scene {
 
         var sign = this.add.image(700,400, 'sign');
         sign.setScale(12);
+        var  choose = this.add.image(700, 200, 'choose');
+        choose.setScale(4);
 
         var shiba = this.add.sprite(460,400, 'shiba');
         shiba.setScale(1.5);

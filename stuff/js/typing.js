@@ -1,3 +1,4 @@
+//import 
 export default class Pause extends Phaser.Scene {
     constructor(){
         super({key: 'typing'});
@@ -10,9 +11,12 @@ export default class Pause extends Phaser.Scene {
 
     preload(){
         this.load.image('long_sign', './stuff/img/Assets/Sprites/longwoodframe.png');
+        this.load.spritesheet('cross', './stuff/img/Assets/Sprites/cross.png', {frameWidth:15, frameHeight:15});
+        this.load.spritesheet('tick', './stuff/img/Assets/Sprites/checkmark.png', {frameWidth:17, frameHeight:14});
         this.load.audio('transition', './stuff/img/Assets/Sounds/Sound_FX/choose_menu_general_sound_3.mp3');
         this.load.audio('error', './stuff/img/Assets/Sounds/Sound_FX/error.mp3');
         this.load.audio('correct', './stuff/img/Assets/Sounds/Sound_FX/correct.mp3');
+       
     }
 
     getRandomArbitrary(min, max) {
@@ -20,12 +24,41 @@ export default class Pause extends Phaser.Scene {
     }
     
     create(){
+    //VARIABLES
+    this.usertext = [];
+
     //FRAME
     var sign = this.add.image(700,180, 'long_sign');
     sign.setScale(9.5);
+    this.cross = this.add.sprite(480, 180, "cross");
+    this.cross.setScale(9.5);
+    this.cross.setFrame(1);
+    this.tick = this.add.sprite(480,180, 'tick');
+    this.tick.setScale(9.5);
+    this.tick.setFrame(1);
+    //CROSS
+    this.anims.create({
+      key: 'cross_blink',
+      frameRate: 2,
+      repeat: 0,
+      frames: this.anims.generateFrameNumbers("cross", {
+       frames: [0,1]
+         })
+    });
 
+    this.anims.create({
+      key: 'tick_blink',
+      frameRate: 2,
+      repeat: 0,
+      frames: this.anims.generateFrameNumbers("tick", {
+       frames: [0,1]
+         })
+    });
+    
+    
     //REFERENCE TO GAME
-    let myGame = this.scene.get('game');
+    this.myGame = this.scene.get('game');
+
 
     //Word groups. 84 words in each group
     this.easyWords = ['act','bay','cut','dry','era','few','gym','hit','hot','ice','job','kid','log','may','new','one','pro',
@@ -40,9 +73,9 @@ export default class Pause extends Phaser.Scene {
     'internet','mountain','favourite','negative','election','division','calendar','action','friction','fiction','glorious',
     'homepage','lonely','monitor','secret','account','balance','capital','causing','brother','sister','factory','extreme',
     'sports','formula','initial','massive','located','tigers','picture','plastic','related','regular','language','twitter',
-    'instagram','website','gravity','heating','soldier','skating','stating','vanilla','chocolate','coconut','cream','balloon',
+    'vintage','website','gravity','heating','soldier','skating','stating','vanilla','chocolate','coconut','cream','balloon',
     'bananas','aquatic','caption','needles', 'painting', 'sharpen','backpack']
-    this.hardHords = ['acceptable','acquire','amateur','believe','conscience','column','conscious','definitely','drunkenness',
+    this.hardWords = ['acceptable','acquire','amateur','believe','conscience','column','conscious','definitely','drunkenness',
     'embarrassment','equipment','exceed','fiery','guarantee','gauge','harass','hierarchy','humorous','ignorance','immediate',
     'inoculate','jewelry','judgment','leisure','license','maintenance','miniature','maneuver','misspell','neighbor','noticeable',
     'occasionally','pastime','perseverance','pronunciation','privilege','questionnaire','receipt','recommend','rhyme','rhythm',
@@ -64,10 +97,58 @@ export default class Pause extends Phaser.Scene {
     else if (this.dif == 'hard'){
       this.word = this.hardWords[Math.floor(this.getRandomArbitrary(0, 83))];
     }
-    console.log(this.dif);
+    this.wordtext = this.add.text(625,100, this.word, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' , color: '#000', fontSize: '60px'});
+    this.usertextarray = this.add.text(625,200, this.usertext.join(""), { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' , color: '#000', fontSize: '60px'});
+
+     
+    this.input.keyboard.on('keydown', function (event) { 
+
+      if(event.key !== "Enter" 
+        && event.key !== "ArrowRight" 
+        && event.key !== "ArrowLeft"  
+        && event.key !== "Shift"  
+        && event.key !== "CapsLock"  
+        && event.key !== "Tab"  
+        && event.key !== "Control"  
+        && event.key !== "AltGraph"  
+        && event.key !== "ArrowDown"  
+        && event.key !== "ArrowUp"  
+        && event.key !== "Escape"  
+        && event.key !== "Alt"){
+          if (event.key === "Backspace"){
+            this.usertext.splice(this.usertext.length - 1, 1);
+          }
+          else{
+            this.usertext.push(event.key);}
+      }
+      this.usertextarray.setText(this.usertext.join(""));
+    },this);
+    
+    this.enter = this.input.keyboard.addKey('ENTER');
+
     }
+    
 
     update(time, delta){
-    
+      
+      if (Phaser.Input.Keyboard.JustDown(this.enter)){
+        let wordtyped = this.usertext.join("");
+        if (this.word === wordtyped){
+          this.sound.play('correct', {volume: 0.6, loop: false});
+          this.tick.play('tick_blink', false);
+          let block2destroy = this.myGame.blockers.getFirst(true);
+          console.log(block2destroy);
+          block2destroy.destroy();
+          this.myGame.player.move = true;
+          this.scene.stop();
+        }
+
+        else{
+          this.sound.play('error', {volume: 0.6, loop: false});
+          this.cross.play('cross_blink', false);
+          this.usertext = [];
+          this.usertextarray.setText("");
+        }
+      }
     }
 }

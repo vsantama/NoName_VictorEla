@@ -32,7 +32,7 @@
 </head>
 
 <body>
-    <h1>Game attempt</h1>
+    <!--<div style="font-family:local_fonts; height: 0px">.</div>div></div>-->
     <script type="module">
         import Game from './game.js'; 
         import HowToPlay from './stuff/js/howto.js';
@@ -53,7 +53,7 @@
                 mode: Phaser.Scale.FIT,
                 autoCenter: Phaser.Scale.CENTER_BOTH
             },
-            scene: [ TitleScreen, Menu, Game, HowToPlay, CharSel, Pause, Type],
+            scene: [ TitleScreen, Menu, Game, HowToPlay, CharSel, Type, Pause],
             physics: { default: 'arcade', arcade: { gravity: { y: 1000 }, debug: true } }
         };
         new Phaser.Game(config);

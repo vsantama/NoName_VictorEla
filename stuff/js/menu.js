@@ -7,7 +7,6 @@ export default class Menu extends Phaser.Scene {
         if (data.music == false){
             this.music = this.sound.add('beach');
             this.music.play({volume: 0.6, loop: true});
-            //make it sound when outside tha game tab
             this.music.pauseOnBlur = false;
         }
         this.char = data.char;
@@ -55,7 +54,7 @@ export default class Menu extends Phaser.Scene {
             //falta pasar los parámetros del init del game
             this.scene.start('game', {lock: this.lock, char: this.char, dif: "easy"});
         })
-
+        //add lock and char parametres
         var buttonhow = this.add.sprite(700, 600, 'howto', );
         buttonhow.setScale(4);
 
@@ -72,7 +71,7 @@ export default class Menu extends Phaser.Scene {
 
         buttonhow.on("pointerup", ()=>{
             buttonhow.setFrame(1);
-            this.scene.start('howto');
+            this.scene.start('howto', {lock: this.lock, char: this.char});
         })
 
         var buttonchar = this.add.sprite(700, 700, 'charse', );

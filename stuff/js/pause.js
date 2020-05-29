@@ -6,12 +6,13 @@ export default class Pause extends Phaser.Scene {
     init (data){
         this.lock = data.lock;
         //must add char value when going to menu
-        //this.char = data.char;
+        this.char = data.char;
     }
 
     preload(){
         this.load.spritesheet('b2m', './stuff/img/Assets/TitleScreenAndSprites/Buttons/back2menu.png', {frameWidth:111, frameHeight:20});
         this.load.spritesheet('con', './stuff/img/Assets/TitleScreenAndSprites/Buttons/continue.png', {frameWidth:80, frameHeight:20});
+        this.load.image('paused', './stuff/img/Assets/TitleScreenAndSprites/Buttons/pause.png');
         this.load.image('sign', './stuff/img/Assets/Sprites/woodframe.png');
         this.load.audio('transition', './stuff/img/Assets/Sounds/Sound_FX/choose_menu_general_sound_3.mp3');
     }
@@ -24,7 +25,9 @@ export default class Pause extends Phaser.Scene {
 
         var sign = this.add.image(700,400, 'sign');
         sign.setScale(12);
-        var buttonback = this.add.sprite(700, 250, 'b2m', );
+        var paus = this.add.image(700, 200, 'paused');
+        paus.setScale(7);
+        var buttonback = this.add.sprite(700, 350, 'b2m', );
         buttonback.setScale(4);
         var buttoncont = this.add.sprite(700, 550, 'con', );
         buttoncont.setScale(4);
@@ -46,7 +49,7 @@ export default class Pause extends Phaser.Scene {
             buttonback.setFrame(1);
             this.scene.stop("game");
             this.scene.stop();
-            this.scene.start('menu', {music: false, lock: this.lock});
+            this.scene.start('menu', {music: false, lock: this.lock, char: this.char});
         })
 
         buttoncont.on("pointerover", ()=>{

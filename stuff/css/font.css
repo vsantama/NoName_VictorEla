@@ -1,0 +1,7 @@
+@font-face {
+    font-family: "local_fonts";
+    src: 
+       url("./stuff/img/Assets/fonts/yoster.ttf") format("truetype");
+   font-weight: bold;
+   font-style: normal;
+ }
