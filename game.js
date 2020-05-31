@@ -3,6 +3,7 @@ import CopperBoulder from "./stuff/js/CopperBoulder.js";
 import SilverBoulder from "./stuff/js/SilverBoulder.js";
 import GoldBoulder from "./stuff/js/GoldBoulder.js";
 import Snake from './stuff/js/Snake.js';
+import PowerUps from './stuff/js/PowerUps.js';
 
 export default class Game extends Phaser.Scene {
   constructor() {
@@ -20,15 +21,13 @@ export default class Game extends Phaser.Scene {
     this.load.image('sea', './stuff/img/Assets/Backgrounds/sea.png');
     this.load.spritesheet('shiba', './stuff/img/Assets/Sprites/characters_enemies/shiba/shiba_spritesheet.png', {frameWidth:126, frameHeight:194});
     this.load.spritesheet('shiba_flip', './stuff/img/Assets/Sprites/characters_enemies/shiba/shiba_spritesheet_flipped.png', {frameWidth:126, frameHeight:194});
+    this.load.spritesheet('life', './stuff/img/Assets/Sprites/hearts_196x56.png', {frameWidth:196, frameHeight:56});
     this.load.image('sandtiles', './stuff/img/Assets/map/beach_tiles_64x32.png');
     this.load.tilemapTiledJSON('beach_light', './stuff/img/Assets/map/beach_light.json');
-    this.load.audio('snake_dies', './stuff/img/Assets/Sounds/Sound_FX/snake_Hiss.mp3');
-    this.load.audio('snake_attack', './stuff/img/Assets/Sounds/Sound_FX/snake_attack.mp3');
     CopperBoulder.preloadBoulder(this);
     SilverBoulder.preloadBoulder(this);
     GoldBoulder.preloadBoulder(this);
     Snake.preloadSnake(this);
-
   }
 
   getRandomArbitrary(min, max) {
@@ -40,13 +39,16 @@ export default class Game extends Phaser.Scene {
     this.direction = 'right';
     let m = Math.random() * (5 - 0) + 0;
     console.log(m);
+    this.cont = 0;
    //BACKGROUND
    this.clouds = this.add.tileSprite(0, 400, 60000, 800, "clouds");
    this.sea = this.add.tileSprite(0, 400, 60000, 800, 'sea');
    this.sand = this.add.tileSprite(0, 400, 60000, 800, 'sand');
-   
-    //MAPS
-  this.map = this.make.tilemap({
+   //PLAYER'S LIFE
+   this.life = this.add.sprite(150, 80, "life");
+   this.life.setFrame(3);
+   //MAPS
+   this.map = this.make.tilemap({
     key: 'beach_light',
     tileWidth: 64,
     tileHeight: 32
@@ -62,10 +64,19 @@ export default class Game extends Phaser.Scene {
    this.player.move = true;
    this.physics.add.collider(this.player, this.groundLayer);
    
-
+  this.testsnek = this.add.sprite(200, 570, "snake");
+  this.testsnek.setScale(3);
+  this.testsnek.state = 0;
    //COLLLISION GROUPS
    this.powerups = this.physics.add.staticGroup();
    this.blockers = this.physics.add.staticGroup(); 
+   this.snakes = this.physics.add.staticGroup();
+   this.physics.add.collider(this.snakes, this.groundLayer);
+   this.snakes.classType = Phaser.Physics.Arcade.Sprite;
+
+
+   //CREATION OF POWERUPS
+
    //CREATION OF BLOCKERS
    var i;
    var n = 5;
@@ -75,9 +86,15 @@ export default class Game extends Phaser.Scene {
       this.blockers.add(firstcop);
      }
      else if (i===2){
-      let snake_e = new Snake(this, this.getRandomArbitrary((10000/n)*i, (10000/n)*(i+1)), 470);
+      //let snake_e = new Snake(this, this.getRandomArbitrary((10000/n)*i, (10000/n)*(i+1)), 470);
+      let snake_e = new Snake(this, 300, 470);
       snake_e.setScale(4);
-      this.blockers.add(snake_e);
+      /*this.physics.add.existing(snake_e);
+      
+      console.log(snake_e);
+      this.physics.add.collider(snake_e, this.groundLayer);
+      snake_e.setImmovable(true);*/
+      this.snakes.add(snake_e);
      }
      else{
       let cop = new CopperBoulder(this, this.getRandomArbitrary((10000/n)*i, (10000/n)*(i+1)), 570);
@@ -88,7 +105,8 @@ export default class Game extends Phaser.Scene {
     if (i===2){
       let snake_m = new Snake(this, this.getRandomArbitrary(10000 + (10000/n)*i, 10000 + (10000/n)*(i+1)), 470);
       snake_m.setScale(4);
-      this.blockers.add(snake_m);
+      this.snakes.add(snake_m);
+
      }
     else{
       let sil = new SilverBoulder(this, this.getRandomArbitrary(10000 + ((10000/n)*i), 10000 + ((10000/n)*(i+1))), 570);
@@ -99,7 +117,7 @@ export default class Game extends Phaser.Scene {
     if (i===2){
       let snake_h = new Snake(this, this.getRandomArbitrary(20000 + (10000/n)*i, 20000 + (10000/n)*(i+1)), 470);
       snake_h.setScale(4);
-      this.blockers.add(snake_h);
+      this.snakes.add(snake_h);
      }
     else{
     let gol = new GoldBoulder(this, this.getRandomArbitrary(20000 + ((10000/n)*i), 20000 + ((10000/n)*(i+1))), 570);
@@ -108,14 +126,26 @@ export default class Game extends Phaser.Scene {
   }
    ////////////////////////////////////////////////////////////////////////////////
   console.log(this.blockers.getChildren());
+  console.log(this.snakes.getChildren());
 
   //COLLISIONS
   this.physics.add.collider(this.player, this.blockers, function(player, blocker){
     this.launched = false;
     if (this.launched == false){
-      player.myGame.scene.launch('typing', {lock: this.lock, dif: player.myGame.dif});
+      player.myGame.scene.launch('typing', {lock: this.lock, dif: player.myGame.dif, enemy: "boulder"});
       player.move = false;
       //console.log(player.myGame)
+    }
+  });
+
+  this.physics.add.collider(this.player, this.snakes, function(player, snake){
+    this.launched = false;
+    if (this.launched == false){
+      snake.SnakeIdle();
+      player.myGame.scene.launch('typing', {lock: this.lock, dif: player.myGame.dif, enemy: "snake"});
+      player.move = false;
+
+      //console.log("snake.SnakeIdle"); ->getsHere
     }
   });
   
@@ -184,6 +214,7 @@ export default class Game extends Phaser.Scene {
   }
 
   update(time, delta) {
+    //this.testsnek.play("snake_idle", true);
     if (this.cursors.left.isDown && this.player.x > 55){ 
       if(this.player.move == true){
         this.player.play("run_flip", true);
@@ -245,6 +276,23 @@ export default class Game extends Phaser.Scene {
     else if (this.player.x > 20000){
       this.dif = 'hard';
      }
-
-  }    
+     
+     let self = this;
+     this.snakes.getChildren().forEach(function (block) {
+      if (self.cont === 0) {
+        console.log(block.state);
+        self.cont++;
+      }
+  
+        
+        switch(block.state){
+          case 0: 
+            //console.log("block.state switch"); -> gets here
+            block.play("snake_idle", true); break; //even if you do .anims it doesnt work
+          case 1: block.anims.play("snake_attack", true); break;
+          case 2: block.anims.play("snake_die", true); break;
+         }
+       
+      });
+    }    
 }

@@ -7,6 +7,7 @@ export default class Pause extends Phaser.Scene {
     init (data){
         this.lock = data.lock;
         this.dif = data.dif;
+        this.enemy = data.enemy;
     }
 
     preload(){
@@ -136,9 +137,14 @@ export default class Pause extends Phaser.Scene {
         if (this.word === wordtyped){
           this.sound.play('correct', {volume: 0.6, loop: false});
           this.tick.play('tick_blink', false);
-          let block2destroy = this.myGame.blockers.getFirst(true);
-          console.log(block2destroy);
-          block2destroy.destroy();
+          if (this.enemy === "boulder"){
+            let block2destroy = this.myGame.blockers.getFirst(true);
+            block2destroy.destroy();
+          }
+          else if (this.enemy === "snake"){
+            let block2destroy = this.myGame.snakes.getFirst(true);
+            block2destroy.destroy();
+          }
           this.myGame.player.move = true;
           this.scene.stop();
         }

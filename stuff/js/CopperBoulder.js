@@ -5,6 +5,7 @@ export default class CopperBoulder extends Blocker{
     constructor(Scene, x, y){
         super(Scene, x, y, 'cop_boulder');
         Scene.parent = Scene; 
+        this.name = "copper";
         Scene.add.existing(this);
         }
 

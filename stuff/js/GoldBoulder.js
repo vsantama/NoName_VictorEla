@@ -4,7 +4,8 @@ export default class GoldBoulder extends Blocker{
 
     constructor(Scene, x, y){
         super(Scene, x, y, 'gol_boulder');
-        Scene.parent = Scene; //esto es un poco guarro
+        Scene.parent = Scene; 
+        this.name = "gold";
         Scene.add.existing(this);
     }
 
