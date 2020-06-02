@@ -53,7 +53,6 @@ export default class Menu extends Phaser.Scene {
             this.music.stop();
             //falta pasar los parámetros del init del game
             this.scene.start('game', {lock: this.lock, char: this.char, dif: "easy"});
-            this.scene.start('pinfo');
         })
         //add lock and char parametres
         var buttonhow = this.add.sprite(700, 600, 'howto', );

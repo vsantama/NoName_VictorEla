@@ -6,6 +6,8 @@ import Snake from './stuff/js/Snake.js';
 import PowerUps from './stuff/js/PowerUps.js';
 import Heart from './stuff/js/Heart.js';
 import Potion from "./stuff/js/Potion.js";
+import Player from "./stuff/js/Player.js";
+import Shiba from "./stuff/js/Shiba.js";
 
 export default class Game extends Phaser.Scene {
   constructor() {
@@ -21,9 +23,6 @@ export default class Game extends Phaser.Scene {
     this.load.image('clouds', './stuff/img/Assets/Backgrounds/clouds.png');
     this.load.image('sand', './stuff/img/Assets/Backgrounds/sand.png');
     this.load.image('sea', './stuff/img/Assets/Backgrounds/sea.png');
-    this.load.spritesheet('shiba', './stuff/img/Assets/Sprites/characters_enemies/shiba/shiba_spritesheet.png', {frameWidth:126, frameHeight:194});
-    this.load.spritesheet('shiba_flip', './stuff/img/Assets/Sprites/characters_enemies/shiba/shiba_spritesheet_flipped.png', {frameWidth:126, frameHeight:194});
-    
     this.load.image('sandtiles', './stuff/img/Assets/map/beach_tiles_64x32.png');
     this.load.tilemapTiledJSON('beach_light', './stuff/img/Assets/map/beach_light.json');
     CopperBoulder.preloadBoulder(this);
@@ -32,6 +31,7 @@ export default class Game extends Phaser.Scene {
     Snake.preloadSnake(this);
     Heart.preloadHeart(this);
     Potion.preloadPotion(this);
+    Shiba.preloadShiba(this);
   }
 
   getRandomArbitrary(min, max) {
@@ -60,10 +60,8 @@ export default class Game extends Phaser.Scene {
   this.groundLayer.setCollisionByExclusion(-1, true);
 
    //PLAYER                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-   this.player = this.add.sprite(100, 500, "shiba");
+   this.player = new Shiba (this, 100, 500);
    this.physics.add.existing(this.player);
-   this.player.myGame = this;
-   this.player.move = true;
    this.physics.add.collider(this.player, this.groundLayer);
    
    //COLLLISION GROUPS
@@ -77,17 +75,17 @@ export default class Game extends Phaser.Scene {
    //CREATION OF POWERUPS
    var oz = Math.round(Math.random());
    switch(oz){
-    case 0: let heart = new Heart(this, this.getRandomArbitrary(7000, 13000), 360);
+    case 0: let heart = new Heart(this, this.getRandomArbitrary(7000, 13000), 330);
       heart.anims.play("heart_move", true);
       this.powerups.add(heart);
       let potion = new Potion(this, this.getRandomArbitrary(13100, 20000), 360);
       potion.anims.play("potion_move", true);
       this.powerups.add(potion);
       break;
-    case 1: let potion_ = new Potion(this, this. getRandomArbitrary(7000, 13000), 360);
-    potion.anims.play("potion_move", true);
+    case 1: let potion_ = new Potion(this, this. getRandomArbitrary(7000, 13000), 330);
+    potion_.anims.play("potion_move", true);
     this.powerups.add(potion_);
-    let heart_ = new Heart(this, this.getRandomArbitrary(13100, 20000), 360);
+    let heart_ = new Heart(this, this.getRandomArbitrary(13100, 20000), 330);
     heart_.anims.play("heart_move", true);
     this.powerups.add(heart_);
       break;
@@ -124,23 +122,32 @@ export default class Game extends Phaser.Scene {
     }
   }
   for (i = 0; i < n; i++){
-    if (i===2){
+    if (i===4){
+      let lastgol = new GoldBoulder(this, this.getRandomArbitrary(20000 + ((10000/n)*i), 29900), 570);
+      this.blockers.add(lastgol);
+     }
+    else if (i===2){
       let snake_h = new Snake(this, this.getRandomArbitrary(20000 + (10000/n)*i, 20000 + (10000/n)*(i+1)), 470);
       snake_h.setScale(4);
       this.snakes.add(snake_h);
-     }
+    }
     else{
     let gol = new GoldBoulder(this, this.getRandomArbitrary(20000 + ((10000/n)*i), 20000 + ((10000/n)*(i+1))), 570);
     this.blockers.add(gol);
     }
   }
    ////////////////////////////////////////////////////////////////////////////////
-  console.log(this.blockers.getChildren());
-  console.log(this.snakes.getChildren());
+  //console.log(this.blockers.getChildren());
+  //console.log(this.snakes.getChildren());
 
   //COLLISIONS
   this.physics.add.collider(this.player, this.blockers, function(player, blocker){
     this.launched = false;
+    switch(blocker.name){
+      case "copper": player.myGame.dif = "easy"; break;
+      case "silver": player.myGame.dif = "medium"; break;
+      case "gold": player.myGame.dif = "hard"; break;
+    }
     if (this.launched == false){
       player.myGame.scene.launch('typing', {lock: this.lock, dif: player.myGame.dif, enemy: "boulder"});
       player.move = false;
@@ -152,61 +159,21 @@ export default class Game extends Phaser.Scene {
     if (this.launched == false){
       player.myGame.scene.launch('typing', {lock: this.lock, dif: player.myGame.dif, enemy: "snake"});
       player.move = false;
-
-      //console.log("snake.SnakeIdle"); ->getsHere
     }
   });
-  
+  this.infoEmitter = new Phaser.Events.EventEmitter();
+  //OVERLAPS
+  this.physics.add.overlap(this.player, this.powerups, function(player, powerup){
+    if (powerup.name == "heart"){
+      player.myGame.infoEmitter.emit('heart_pickup');
+      powerup.destroy();
+    }
+    else{
+      powerup.destroy();
+    }
+  });
    //doesnt work
-   this.anims.create({
-    key: 'run',
-    frameRate: 10,
-    frames: this.anims.generateFrameNumbers("shiba", {
-     frames: [0,1,3,4,5,6,8,9,10,11]
-       })
-  });
- 
-  this.anims.create({
-    key: 'run_flip',
-    frameRate: 10,
-    frames: this.anims.generateFrameNumbers("shiba_flip", {
-     frames: [0,1,3,4,5,6,8,9,10,11]
-       })
-  });
-
-   this.anims.create({
-     key: 'jump',
-     frameRate: 4,
-     frames: this.anims.generateFrameNumbers("shiba", {
-      frames: [12,13,14]
-        })
-   });
-
-   this.anims.create({
-    key: 'jump_flip',
-    frameRate: 4,
-    frames: this.anims.generateFrameNumbers("shiba_flip", {
-     frames: [12,13,14]
-       })
-  });
-
-   this.anims.create({
-    key: 'idle',
-    frameRate: 5,
-    repeat: -1,
-    frames: this.anims.generateFrameNumbers("shiba", {
-     frames: [3,19]
-       })
-  });
-
-  this.anims.create({
-    key: 'idle_flip',
-    frameRate: 5,
-    repeat: -1,
-    frames: this.anims.generateFrameNumbers("shiba_flip", {
-     frames: [3,19]
-       })
-  });
+   
   
    
    this.player.play("idle");
@@ -216,8 +183,12 @@ export default class Game extends Phaser.Scene {
    // making the camera follow the player
    this.myCam.startFollow(this.player);
 
+   //KEYS
    this.cursors = this.input.keyboard.createCursorKeys();
    this.escape = this.input.keyboard.addKey('ESC');
+
+   //INFO SCENE
+   this.scene.run('pinfo', {emitter: this.infoEmitter});
 
   }
 
@@ -280,21 +251,13 @@ export default class Game extends Phaser.Scene {
       this.scene.pause('game');
       this.scene.launch('pause', {lock: this.lock, char: this.char});
     }
-
-     ///////////////////////
-     if (this.player.x > 10000 && this.player.x < 20000){
-        this.dif = 'medium';
-     }
-    else if (this.player.x > 20000){
-      this.dif = 'hard';
-     }
      
-     let self = this;
+     //let self = this;
      this.snakes.getChildren().forEach(function (block) {
-      if (self.cont === 0) {
+      /*if (self.cont === 0) {
         console.log(block.state);
         self.cont++;
-      }
+      }*/
   
         
         switch(block.state){
