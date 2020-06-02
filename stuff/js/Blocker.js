@@ -5,7 +5,5 @@ export default class Blocker extends Phaser.Physics.Arcade.Sprite{
         this.parent = Scene; 
     }
 
-    preUpdate(t, dt){
-        
-    }
+ 
 }

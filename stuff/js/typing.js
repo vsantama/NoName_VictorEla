@@ -63,10 +63,10 @@ export default class Pause extends Phaser.Scene {
 
     //Word groups. 84 words in each group
     this.easyWords = ['act','bay','cut','dry','era','few','gym','hit','hot','ice','job','kid','log','may','new','one','pro',
-    'red','sis','tea','use','blog','boat','crew','data','diner','eyes','else','film',
+    'red','when','tea','use','blog','boat','crew','data','diner','eyes','else','film',
     'feed','feet','gold','grew','hall','hill','into','iron','join','jump','king','knew','know','lion','like','moon','menu',
     'none','note','null','over','open','post','pool','tiny','tips','user','upon','visa',
-    'vast','walk','weak','yard','year','zack','asset','birds','catch','drink','eight','fifth','games','happy','juice','knife',
+    'vast','walk','weak','yard','year','done','asset','birds','catch','drink','eight','fifth','games','happy','juice','knife',
     'label','mount','night','occur','panel','queen','range','ships','thick','done']
     this.mediumWords = ['agency','backup','crisis','figure','growth','joined','launch',
     'method','powder','affairs','average','disease','fashion','foreign','greatly','minimum','ongoing','analyst','bringing',
@@ -143,6 +143,15 @@ export default class Pause extends Phaser.Scene {
           }
           else if (this.enemy === "snake"){
             let block2destroy = this.myGame.snakes.getFirst(true);
+            block2destroy.SnakeDie();
+            /*time.addEvent({
+              delay: 500,
+              callback: ()=>{
+                console.log("timeEvent");
+                  block2destroy.destroy();
+              },
+              loop: true
+          })*/
             block2destroy.destroy();
           }
           this.myGame.player.move = true;

@@ -4,6 +4,8 @@ import SilverBoulder from "./stuff/js/SilverBoulder.js";
 import GoldBoulder from "./stuff/js/GoldBoulder.js";
 import Snake from './stuff/js/Snake.js';
 import PowerUps from './stuff/js/PowerUps.js';
+import Heart from './stuff/js/Heart.js';
+import Potion from "./stuff/js/Potion.js";
 
 export default class Game extends Phaser.Scene {
   constructor() {
@@ -21,13 +23,15 @@ export default class Game extends Phaser.Scene {
     this.load.image('sea', './stuff/img/Assets/Backgrounds/sea.png');
     this.load.spritesheet('shiba', './stuff/img/Assets/Sprites/characters_enemies/shiba/shiba_spritesheet.png', {frameWidth:126, frameHeight:194});
     this.load.spritesheet('shiba_flip', './stuff/img/Assets/Sprites/characters_enemies/shiba/shiba_spritesheet_flipped.png', {frameWidth:126, frameHeight:194});
-    this.load.spritesheet('life', './stuff/img/Assets/Sprites/hearts_196x56.png', {frameWidth:196, frameHeight:56});
+    
     this.load.image('sandtiles', './stuff/img/Assets/map/beach_tiles_64x32.png');
     this.load.tilemapTiledJSON('beach_light', './stuff/img/Assets/map/beach_light.json');
     CopperBoulder.preloadBoulder(this);
     SilverBoulder.preloadBoulder(this);
     GoldBoulder.preloadBoulder(this);
     Snake.preloadSnake(this);
+    Heart.preloadHeart(this);
+    Potion.preloadPotion(this);
   }
 
   getRandomArbitrary(min, max) {
@@ -44,9 +48,7 @@ export default class Game extends Phaser.Scene {
    this.clouds = this.add.tileSprite(0, 400, 60000, 800, "clouds");
    this.sea = this.add.tileSprite(0, 400, 60000, 800, 'sea');
    this.sand = this.add.tileSprite(0, 400, 60000, 800, 'sand');
-   //PLAYER'S LIFE
-   this.life = this.add.sprite(150, 80, "life");
-   this.life.setFrame(3);
+   
    //MAPS
    this.map = this.make.tilemap({
     key: 'beach_light',
@@ -64,9 +66,6 @@ export default class Game extends Phaser.Scene {
    this.player.move = true;
    this.physics.add.collider(this.player, this.groundLayer);
    
-  this.testsnek = this.add.sprite(200, 570, "snake");
-  this.testsnek.setScale(3);
-  this.testsnek.state = 0;
    //COLLLISION GROUPS
    this.powerups = this.physics.add.staticGroup();
    this.blockers = this.physics.add.staticGroup(); 
@@ -76,7 +75,23 @@ export default class Game extends Phaser.Scene {
 
 
    //CREATION OF POWERUPS
-
+   var oz = Math.round(Math.random());
+   switch(oz){
+    case 0: let heart = new Heart(this, this.getRandomArbitrary(7000, 13000), 360);
+      heart.anims.play("heart_move", true);
+      this.powerups.add(heart);
+      let potion = new Potion(this, this.getRandomArbitrary(13100, 20000), 360);
+      potion.anims.play("potion_move", true);
+      this.powerups.add(potion);
+      break;
+    case 1: let potion_ = new Potion(this, this. getRandomArbitrary(7000, 13000), 360);
+    potion.anims.play("potion_move", true);
+    this.powerups.add(potion_);
+    let heart_ = new Heart(this, this.getRandomArbitrary(13100, 20000), 360);
+    heart_.anims.play("heart_move", true);
+    this.powerups.add(heart_);
+      break;
+   }
    //CREATION OF BLOCKERS
    var i;
    var n = 5;
@@ -89,11 +104,6 @@ export default class Game extends Phaser.Scene {
       //let snake_e = new Snake(this, this.getRandomArbitrary((10000/n)*i, (10000/n)*(i+1)), 470);
       let snake_e = new Snake(this, 300, 470);
       snake_e.setScale(4);
-      /*this.physics.add.existing(snake_e);
-      
-      console.log(snake_e);
-      this.physics.add.collider(snake_e, this.groundLayer);
-      snake_e.setImmovable(true);*/
       this.snakes.add(snake_e);
      }
      else{
@@ -134,14 +144,12 @@ export default class Game extends Phaser.Scene {
     if (this.launched == false){
       player.myGame.scene.launch('typing', {lock: this.lock, dif: player.myGame.dif, enemy: "boulder"});
       player.move = false;
-      //console.log(player.myGame)
     }
   });
 
   this.physics.add.collider(this.player, this.snakes, function(player, snake){
     this.launched = false;
     if (this.launched == false){
-      snake.SnakeIdle();
       player.myGame.scene.launch('typing', {lock: this.lock, dif: player.myGame.dif, enemy: "snake"});
       player.move = false;
 
@@ -214,52 +222,50 @@ export default class Game extends Phaser.Scene {
   }
 
   update(time, delta) {
-    //this.testsnek.play("snake_idle", true);
-    if (this.cursors.left.isDown && this.player.x > 55){ 
-      if(this.player.move == true){
-        this.player.play("run_flip", true);
-      this.direction = 'left';   
-      this.player.body.setVelocityX(-400);
-      this.player.scaleX = 1;
-      this.clouds.tilePositionX -= 0.5;
-      this.sea.tilePositionX -= 1;
-      this.sand.tilePositionX -= 2; 
-      } 
-  
-    } else if (this.cursors.right.isDown) {
-      if(this.player.move == true){
-        this.player.play("run", true);   
-        this.direction = 'right';
-        this.player.body.setVelocityX(400);
-      if (this.player.x < 1000){
-        this.clouds.tilePositionX += 0.5;
-        this.sea.tilePositionX += 1;
-        this.sand.tilePositionX += 2; 
-        this.player.scaleX = 1; 
-    }
-      else{
-      this.player.scaleX = 1;
-      this.clouds.tilePositionX += 0.8;
-      this.sea.tilePositionX += 1.5;
-      this.sand.tilePositionX += 3; 
-      }
-      }
-    } 
-     else if ((this.cursors.space.isDown || this.cursors.up.isDown) && (this.player.body.onFloor())){
-      console.log(this.blockers.getChildren());
-      if(this.player.move == true){
-        this.player.body.setVelocityY(-400);
-        console.log(this.dif);
-        if (this.direction == 'right')  this.player.play('jump', true);
-        else this.player.play('jump_flip', true);
-      }
-     }
+    if(this.cursors.left.isDown  || this.cursors.right.isDown || (this.cursors.space.isDown || this.cursors.up.isDown)){
 
-     //wont go if pressed once after pausing before
-     else if (Phaser.Input.Keyboard.JustDown(this.escape)){
-      this.scene.pause('game');
-      this.scene.launch('pause', {lock: this.lock, char: this.char});
+      if (this.cursors.left.isDown && this.player.x > 55){ 
+        if(this.player.move == true){
+          this.player.play("run_flip", true);
+        this.direction = 'left';   
+        this.player.body.setVelocityX(-400);
+        this.player.scaleX = 1;
+        this.clouds.tilePositionX -= 0.5;
+        this.sea.tilePositionX -= 1;
+        this.sand.tilePositionX -= 2; 
+        } 
+    
+      } else if (this.cursors.right.isDown) {
+        if(this.player.move == true){
+          this.player.play("run", true);   
+          this.direction = 'right';
+          this.player.body.setVelocityX(400);
+        if (this.player.x < 1000){
+          this.clouds.tilePositionX += 0.5;
+          this.sea.tilePositionX += 1;
+          this.sand.tilePositionX += 2; 
+          this.player.scaleX = 1; 
+      }
+        else{
+        this.player.scaleX = 1;
+        this.clouds.tilePositionX += 0.8;
+        this.sea.tilePositionX += 1.5;
+        this.sand.tilePositionX += 3; 
+        }
+        }
+      } 
+       if ((this.cursors.space.isDown || this.cursors.up.isDown) && (this.player.body.onFloor())){
+        console.log(this.blockers.getChildren());
+        if(this.player.move == true){
+          this.player.body.setVelocityY(-400);
+          console.log(this.dif);
+          if (this.direction == 'right')  this.player.play('jump', true);
+          else this.player.play('jump_flip', true);
+        }
+       }
+
     }
+    
 
      else{
       this.player.body.setVelocityX(0);
@@ -268,6 +274,12 @@ export default class Game extends Phaser.Scene {
         else this.player.play('idle_flip', true);
       }
      }
+     //wont go if pressed once after pausing before
+     if (Phaser.Input.Keyboard.JustDown(this.escape)){
+       console.log("presing escape");
+      this.scene.pause('game');
+      this.scene.launch('pause', {lock: this.lock, char: this.char});
+    }
 
      ///////////////////////
      if (this.player.x > 10000 && this.player.x < 20000){

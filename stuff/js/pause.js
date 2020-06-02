@@ -48,6 +48,7 @@ export default class Pause extends Phaser.Scene {
         buttonback.on("pointerup", ()=>{
             buttonback.setFrame(1);
             this.scene.stop("game");
+            this.scene.stop("pinfo");
             this.scene.stop();
             this.scene.start('menu', {music: false, lock: this.lock, char: this.char});
         })

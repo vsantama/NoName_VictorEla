@@ -6,7 +6,7 @@ export default class Snake extends Blocker{
         super(Scene, x, y, 'snake');
         Scene.parent = Scene; 
         Scene.add.existing(this);
-        this.state = -1;
+        this.state = 0;
         this.name = "snake";
         Scene.anims.create({
             key: 'snake_idle',
@@ -35,7 +35,7 @@ export default class Snake extends Blocker{
     }
 
     static preloadSnake(Game){
-        Game.load.spritesheet('snake', './stuff/img/Assets/Sprites/characters_enemies/snake_spritesheet.png', {frameWidth:42, frameHeight:64});
+        Game.load.spritesheet('snake', './stuff/img/Assets/Sprites/characters_enemies/snake_spritesheet.png', {frameWidth:42, frameHeight:65});
         Game.load.audio('snake_dies', './stuff/img/Assets/Sounds/Sound_FX/snake_Hiss.mp3');
         Game.load.audio('snake_attacks', './stuff/img/Assets/Sounds/Sound_FX/snake_attack.mp3');
     }
