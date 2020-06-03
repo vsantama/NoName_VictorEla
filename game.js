@@ -25,6 +25,9 @@ export default class Game extends Phaser.Scene {
     this.load.image('sea', './stuff/img/Assets/Backgrounds/sea.png');
     this.load.image('sandtiles', './stuff/img/Assets/map/beach_tiles_64x32.png');
     this.load.tilemapTiledJSON('beach_light', './stuff/img/Assets/map/beach_light.json');
+    this.load.audio('jump', './stuff/img/Assets/Sounds/Sound_FX/jump.mp3');
+    this.load.audio('pickup', './stuff/img/Assets/Sounds/Sound_FX/random_generic_cute_sound.mp3');
+    this.load.audio('pausegame', './stuff/img/Assets/Sounds/Sound_FX/pause_game_2.mp3');
     CopperBoulder.preloadBoulder(this);
     SilverBoulder.preloadBoulder(this);
     GoldBoulder.preloadBoulder(this);
@@ -44,6 +47,7 @@ export default class Game extends Phaser.Scene {
     let m = Math.random() * (5 - 0) + 0;
     console.log(m);
     this.cont = 0;
+    this.potion = false;
    //BACKGROUND
    this.clouds = this.add.tileSprite(0, 400, 60000, 800, "clouds");
    this.sea = this.add.tileSprite(0, 400, 60000, 800, 'sea');
@@ -143,6 +147,7 @@ export default class Game extends Phaser.Scene {
   //COLLISIONS
   this.physics.add.collider(this.player, this.blockers, function(player, blocker){
     this.launched = false;
+    console.log("potion " + player.myGame.potion);
     switch(blocker.name){
       case "copper": player.myGame.dif = "easy"; break;
       case "silver": player.myGame.dif = "medium"; break;
@@ -164,11 +169,13 @@ export default class Game extends Phaser.Scene {
   this.infoEmitter = new Phaser.Events.EventEmitter();
   //OVERLAPS
   this.physics.add.overlap(this.player, this.powerups, function(player, powerup){
+    player.myGame.sound.play('pickup', {volume: 0.6, loop: false});
     if (powerup.name == "heart"){
       player.myGame.infoEmitter.emit('heart_pickup');
       powerup.destroy();
     }
     else{
+      player.myGame.infoEmitter.emit('potion_pickup');
       powerup.destroy();
     }
   });
@@ -188,7 +195,7 @@ export default class Game extends Phaser.Scene {
    this.escape = this.input.keyboard.addKey('ESC');
 
    //INFO SCENE
-   this.scene.run('pinfo', {emitter: this.infoEmitter});
+   this.scene.launch('pinfo', {emitter: this.infoEmitter});
 
   }
 
@@ -225,9 +232,9 @@ export default class Game extends Phaser.Scene {
         }
         }
       } 
-       if ((this.cursors.space.isDown || this.cursors.up.isDown) && (this.player.body.onFloor())){
-        console.log(this.blockers.getChildren());
+       if (this.cursors.up.isDown && this.player.body.onFloor()){
         if(this.player.move == true){
+          this.sound.play('jump', {volume: 0.4, loop: false});
           this.player.body.setVelocityY(-400);
           console.log(this.dif);
           if (this.direction == 'right')  this.player.play('jump', true);
@@ -247,27 +254,39 @@ export default class Game extends Phaser.Scene {
      }
      //wont go if pressed once after pausing before
      if (Phaser.Input.Keyboard.JustDown(this.escape)){
-       console.log("presing escape");
+      this.sound.play('pausegame', {volume: 0.3, loop: false});
       this.scene.pause('game');
       this.scene.launch('pause', {lock: this.lock, char: this.char});
     }
-     
-     //let self = this;
+
+    if (this.cursors.space.isDown){
+      if (this.potion){
+        this.potion = false;
+        this.infoEmitter.emit('deletePotion');
+        //make shark stop for a little bit
+      }
+    }
+ 
      this.snakes.getChildren().forEach(function (block) {
-      /*if (self.cont === 0) {
-        console.log(block.state);
-        self.cont++;
-      }*/
-  
-        
+
         switch(block.state){
-          case 0: 
-            //console.log("block.state switch"); -> gets here
-            block.play("snake_idle", true); break; //even if you do .anims it doesnt work
-          case 1: block.anims.play("snake_attack", true); break;
-          case 2: block.anims.play("snake_die", true); break;
+          case 0: block.play("snake_idle", true); break; 
+          case 1: 
+            this.sound.play('snake_attacks', {volume: 0.6, loop: false});
+            block.anims.play("snake_attack", true); break;
+          case 2: 
+            this.sound.play('snake_dies', {volume: 0.6, loop: false});
+            block.anims.play("snake_die", true); break;
          }
        
       });
-    }    
+    }   
+    
+    playerDie(){
+      this.scene.stop("pause");
+      this.scene.stop("pinfo");
+      this.scene.stop("typing");
+      this.scene.stop();
+      this.scene.start('menu', {music: false, lock: this.lock, char: this.char});
+    }
 }

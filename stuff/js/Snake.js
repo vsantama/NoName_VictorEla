@@ -19,7 +19,7 @@ export default class Snake extends Blocker{
         Scene.anims.create({
             key: 'snake_attack',
             frameRate: 5,
-            repeat: 0,
+            repeat: -1,
             frames: Scene.anims.generateFrameNumbers("snake", {
              frames: [5, 6, 7, 8, 9]
                })
@@ -27,7 +27,7 @@ export default class Snake extends Blocker{
         Scene.anims.create({
             key: 'snake_die',
             frameRate: 5,
-            repeat: 0,
+            repeat: -1,
             frames: Scene.anims.generateFrameNumbers("snake", {
              frames: [10, 11, 12, 13, 14]
                })
@@ -45,7 +45,6 @@ export default class Snake extends Blocker{
     }
 
     SnakeIdle(){
-        //console.log("SnakeIdle"); -> gets here
         this.state = 0;
     }
 

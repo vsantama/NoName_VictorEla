@@ -16,7 +16,7 @@ export default class CharSel extends Phaser.Scene {
         this.load.image('choose', './stuff/img/Assets/TitleScreenAndSprites/Buttons/chooseyourch.png');
         this.load.image('sign', './stuff/img/Assets/Sprites/woodframe.png');
         this.load.audio('transition', './stuff/img/Assets/Sounds/Sound_FX/choose_menu_general_sound_3.mp3');
-        this.load.audio('beach', './stuff/img/Assets/Sounds/Sound_FX/beach.mp3');
+        this.load.audio('shiba_bark', './stuff/img/Assets/Sounds/Sound_FX/shibe_bark_2.mp3');
         this.load.spritesheet('shiba', './stuff/img/Assets/Sprites/characters_enemies/shiba/shiba_spritesheet.png', {frameWidth:126, frameHeight:194});
         this.load.image('locked_char', './stuff/img/Assets/Sprites/locked_character.png');
 
@@ -73,6 +73,7 @@ export default class CharSel extends Phaser.Scene {
         
         buttonback.setInteractive();
         shiba.setInteractive();
+        this.shibaname.setInteractive();
 
         buttonback.on("pointerover", ()=>{
             buttonback.setFrame(1);
@@ -99,6 +100,24 @@ export default class CharSel extends Phaser.Scene {
 
         shiba.on("pointerup", ()=>{
             shiba.setFrame(18);
+            this.char = "shiba";
+        })
+
+        this.shibaname.on("pointerover", ()=>{
+            if (!this.lock){
+                this.shibaname.setFrame(1);
+                this.sound.play('transition', {volume: 0.6, loop: false});
+            }
+        })
+
+        this.shibaname.on("pointerout", ()=>{
+            if (!this.lock){
+                this.shibaname.setFrame(0);
+            }
+        })
+
+        this.shibaname.on("pointerup", ()=>{
+            this.sound.play('shiba_bark', {volume: 0.6, loop: false});
             this.char = "shiba";
         })
     }

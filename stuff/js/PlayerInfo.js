@@ -7,6 +7,14 @@ export default class PlayerInfo extends Phaser.Scene {
         if (data && data.emitter){
             data.emitter.on('heart_pickup', this.updateLives, this);
         }
+
+        if (data && data.emitter){
+            data.emitter.on('potion_pickup', this.updatePotion, this);
+        }
+        
+        if (data && data.emitter){
+            data.emitter.on('deletePotion', this.deletePotion, this);
+        }
     }
 
     preload(){
@@ -15,20 +23,42 @@ export default class PlayerInfo extends Phaser.Scene {
     }
     
     create(){
-    
-    
+    //GAME REFERENCE
+    this.myGame = this.scene.get('game');
+    //POTION
+    this.potion = this.add.image(300, 80, 'potion');
+    this.potion.setVisible(false);
+    this.potion.visible = false;
     //PLAYER'S LIFE
-    this.lives = 2;
+    this.lives = 3;
     this.life = this.add.sprite(150, 80, "life");
     }
 
     update(time, delta){
         this.life.setFrame(this.lives);
+
+        if (this.lives === 0){
+            this.myGame.playerDie();
+        }
     }
 
     updateLives(){
         if (this.lives < 3){
             this.lives++;
         }
+    }
+
+    updatePotion(){
+        console.log(this.potion.visible);
+        if (!this.potion.visible){
+            this.myGame.potion = true;
+            this.potion.setVisible(true);
+            this.potion.visible = true;
+        }
+    }
+
+    deletePotion(){
+        this.potion.setVisible(false);
+        this.potion.visible = false;
     }
 }

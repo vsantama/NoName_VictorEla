@@ -25,8 +25,13 @@ export default class Pause extends Phaser.Scene {
     }
     
     create(){
+    //REFERENCE TO SCENES
+    this.myGame = this.scene.get('game');
+    this.myInfo = this.scene.get('pinfo');
+
     //VARIABLES
     this.usertext = [];
+    //this.snake = this.myGame.snakes.getFirst(true);
 
     //FRAME
     var sign = this.add.image(700,180, 'long_sign');
@@ -55,12 +60,7 @@ export default class Pause extends Phaser.Scene {
        frames: [0,1]
          })
     });
-    
-    
-    //REFERENCE TO GAME
-    this.myGame = this.scene.get('game');
-
-
+   
     //Word groups. 84 words in each group
     this.easyWords = ['act','bay','cut','dry','era','few','gym','hit','hot','ice','job','kid','log','may','new','one','pro',
     'red','when','tea','use','blog','boat','crew','data','diner','eyes','else','film',
@@ -143,7 +143,7 @@ export default class Pause extends Phaser.Scene {
           }
           else if (this.enemy === "snake"){
             let block2destroy = this.myGame.snakes.getFirst(true);
-            block2destroy.SnakeDie();
+            //block2destroy.SnakeDie();
             /*time.addEvent({
               delay: 500,
               callback: ()=>{
@@ -152,18 +152,26 @@ export default class Pause extends Phaser.Scene {
               },
               loop: true
           })*/
-            block2destroy.destroy();
+            block2destroy.anims.play("snake_die");
+            //block2destroy.destroy();
+            
           }
           this.myGame.player.move = true;
           this.scene.stop();
         }
 
         else{
+          if (this.enemy === "snake"){
+            this.myInfo.lives--;
+            
+            //this.snake.SnakeAttack();
+          }
           this.sound.play('error', {volume: 0.6, loop: false});
           this.cross.play('cross_blink', false);
           this.usertext = [];
           this.usertextarray.setText("");
         }
       }
+      //this.snake.SnakeIdle();
     }
 }
