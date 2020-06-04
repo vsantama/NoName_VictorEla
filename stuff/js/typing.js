@@ -25,13 +25,15 @@ export default class Pause extends Phaser.Scene {
     }
     
     create(){
+    //
+    this.oldtime = 0;
     //REFERENCE TO SCENES
     this.myGame = this.scene.get('game');
     this.myInfo = this.scene.get('pinfo');
 
     //VARIABLES
     this.usertext = [];
-    //this.snake = this.myGame.snakes.getFirst(true);
+    this.snake = this.myGame.snakes.getFirst(true);
 
     //FRAME
     var sign = this.add.image(700,180, 'long_sign');
@@ -99,6 +101,7 @@ export default class Pause extends Phaser.Scene {
       this.word = this.hardWords[Math.floor(this.getRandomArbitrary(0, 83))];
     }
     this.wordtext = this.add.text(625,100, this.word, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' , color: '#000', fontSize: '60px'});
+    this.wordtext.alpha = 0;
     this.usertextarray = this.add.text(625,200, this.usertext.join(""), { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' , color: '#000', fontSize: '60px'});
 
      
@@ -131,8 +134,20 @@ export default class Pause extends Phaser.Scene {
     
 
     update(time, delta){
+      ///
       
+      ///
+      if(this.wordtext !== undefined){
+        if(time - this.oldtime > 900){
+          if (this.wordtext.alpha === 1) this.wordtext.alpha = 0;
+          else if ((this.wordtext.alpha === 0)) this.wordtext.alpha = 1;
+          this.oldtime = time;
+        }
+      }
+      ///
       if (Phaser.Input.Keyboard.JustDown(this.enter)){
+        let self = this;
+
         let wordtyped = this.usertext.join("");
         if (this.word === wordtyped){
           this.sound.play('correct', {volume: 0.6, loop: false});
@@ -143,18 +158,15 @@ export default class Pause extends Phaser.Scene {
           }
           else if (this.enemy === "snake"){
             let block2destroy = this.myGame.snakes.getFirst(true);
-            //block2destroy.SnakeDie();
-            /*time.addEvent({
-              delay: 500,
-              callback: ()=>{
-                console.log("timeEvent");
-                  block2destroy.destroy();
-              },
-              loop: true
-          })*/
-            block2destroy.anims.play("snake_die");
+            block2destroy.SnakeDie();
+            block2destroy.body.checkCollision.none = true;
+            this.prueba = block2destroy;
+      
+            self.time.delayedCall(1000, function(){
+              console.log("block2destroy");
+              self.prueba.destroy();
+            }, null, self); //doesnt work
             //block2destroy.destroy();
-            
           }
           this.myGame.player.move = true;
           this.scene.stop();
@@ -164,7 +176,10 @@ export default class Pause extends Phaser.Scene {
           if (this.enemy === "snake"){
             this.myInfo.lives--;
             
-            //this.snake.SnakeAttack();
+            this.snake.SnakeAttack();
+            this.time.delayedCall(1000, function(){
+              this.snake.SnakeIdle(); //does work
+            }, null, this);
           }
           this.sound.play('error', {volume: 0.6, loop: false});
           this.cross.play('cross_blink', false);
@@ -172,6 +187,6 @@ export default class Pause extends Phaser.Scene {
           this.usertextarray.setText("");
         }
       }
-      //this.snake.SnakeIdle();
+      
     }
 }

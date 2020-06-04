@@ -15,6 +15,10 @@ export default class PlayerInfo extends Phaser.Scene {
         if (data && data.emitter){
             data.emitter.on('deletePotion', this.deletePotion, this);
         }
+
+        if (data && data.emitter){
+            data.emitter.on('dogUpdate', this.updateDogX, this);
+        }
     }
 
     preload(){
@@ -32,6 +36,19 @@ export default class PlayerInfo extends Phaser.Scene {
     //PLAYER'S LIFE
     this.lives = 3;
     this.life = this.add.sprite(150, 80, "life");
+    //MINIMAP
+    this.minimapbar = new Phaser.GameObjects.Graphics(this);
+    this.minimapbar.fillStyle(0xF8DC8C);
+    this.minimapbar.fillRect(913, 703, 395, 80).setDepth(2);
+    this.add.existing(this.minimapbar);
+    this.minimapbar2 = new Phaser.GameObjects.Graphics(this);
+    this.minimapbar2.fillStyle(0x000000);
+    this.minimapbar2.fillRect(910, 700, 400, 86);
+    this.add.existing(this.minimapbar2);
+    this.minimapdog = new Phaser.GameObjects.Graphics(this);
+    this.minimapdog.fillStyle(0xFF0000);
+    this.minimapdog.fillCircle(920, 775, 10).setDepth(3);
+    this.add.existing(this.minimapdog);
     }
 
     update(time, delta){
@@ -60,5 +77,11 @@ export default class PlayerInfo extends Phaser.Scene {
     deletePotion(){
         this.potion.setVisible(false);
         this.potion.visible = false;
+    }
+
+    updateDogX(){
+        this.minimapdog.displayOriginX = 1000;
+        this.minimapdog.displayOriginY = 775;
+        console.log(this.minimapdog);
     }
 }

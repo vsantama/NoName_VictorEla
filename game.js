@@ -45,7 +45,6 @@ export default class Game extends Phaser.Scene {
     //VARIABLES
     this.direction = 'right';
     let m = Math.random() * (5 - 0) + 0;
-    console.log(m);
     this.cont = 0;
     this.potion = false;
    //BACKGROUND
@@ -65,7 +64,7 @@ export default class Game extends Phaser.Scene {
 
    //PLAYER                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
    this.player = new Shiba (this, 100, 500);
-   this.physics.add.existing(this.player);
+   this.physics.add.existing(this.player).setDepth(3);;
    this.physics.add.collider(this.player, this.groundLayer);
    
    //COLLLISION GROUPS
@@ -103,8 +102,8 @@ export default class Game extends Phaser.Scene {
       this.blockers.add(firstcop);
      }
      else if (i===2){
-      //let snake_e = new Snake(this, this.getRandomArbitrary((10000/n)*i, (10000/n)*(i+1)), 470);
       let snake_e = new Snake(this, 300, 470);
+      //let snake_e = new Snake(this, this.getRandomArbitrary((10000/n)*i, (10000/n)*(i+1)), 470);
       snake_e.setScale(4);
       this.snakes.add(snake_e);
      }
@@ -167,6 +166,7 @@ export default class Game extends Phaser.Scene {
     }
   });
   this.infoEmitter = new Phaser.Events.EventEmitter();
+
   //OVERLAPS
   this.physics.add.overlap(this.player, this.powerups, function(player, powerup){
     player.myGame.sound.play('pickup', {volume: 0.6, loop: false});
@@ -179,7 +179,6 @@ export default class Game extends Phaser.Scene {
       powerup.destroy();
     }
   });
-   //doesnt work
    
   
    
@@ -201,6 +200,8 @@ export default class Game extends Phaser.Scene {
 
   update(time, delta) {
     if(this.cursors.left.isDown  || this.cursors.right.isDown || (this.cursors.space.isDown || this.cursors.up.isDown)){
+
+      this.infoEmitter.emit('dogUpdate');
 
       if (this.cursors.left.isDown && this.player.x > 55){ 
         if(this.player.move == true){
@@ -272,10 +273,10 @@ export default class Game extends Phaser.Scene {
         switch(block.state){
           case 0: block.play("snake_idle", true); break; 
           case 1: 
-            this.sound.play('snake_attacks', {volume: 0.6, loop: false});
+            //this.sound.play('snake_attacks', {volume: 0.6, loop: false});
             block.anims.play("snake_attack", true); break;
           case 2: 
-            this.sound.play('snake_dies', {volume: 0.6, loop: false});
+            //this.sound.play('snake_dies', {volume: 0.6, loop: false});
             block.anims.play("snake_die", true); break;
          }
        
