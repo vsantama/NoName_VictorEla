@@ -24,6 +24,8 @@ export default class PlayerInfo extends Phaser.Scene {
     preload(){
         this.load.spritesheet('life', './stuff/img/Assets/Sprites/hearts_196x56.png', {frameWidth:196, frameHeight:56});
         this.load.image('potion', './stuff/img/Assets/Sprites/potion_single.png');
+        this.load.image('finn',  './stuff/img/Assets/Sprites/characters_enemies/finn.png');
+        this.load.image('heart', './stuff/img/Assets/Sprites/heart.png');
     }
     
     create(){
@@ -39,16 +41,15 @@ export default class PlayerInfo extends Phaser.Scene {
     //MINIMAP
     this.minimapbar = new Phaser.GameObjects.Graphics(this);
     this.minimapbar.fillStyle(0xF8DC8C);
-    this.minimapbar.fillRect(913, 703, 395, 80).setDepth(2);
+    this.minimapbar.fillRect(913, 703, 394, 80).setDepth(2);
     this.add.existing(this.minimapbar);
     this.minimapbar2 = new Phaser.GameObjects.Graphics(this);
     this.minimapbar2.fillStyle(0x000000);
     this.minimapbar2.fillRect(910, 700, 400, 86);
     this.add.existing(this.minimapbar2);
-    this.minimapdog = new Phaser.GameObjects.Graphics(this);
-    this.minimapdog.fillStyle(0xFF0000);
-    this.minimapdog.fillCircle(920, 775, 10).setDepth(3);
-    this.add.existing(this.minimapdog);
+    //change 925 to wherever dog is
+    this.minimapdog = this.add.image(925, 770, 'heart').setDepth(3);
+    this.minimapdog.setScale(0.5);
     }
 
     update(time, delta){
@@ -80,8 +81,6 @@ export default class PlayerInfo extends Phaser.Scene {
     }
 
     updateDogX(){
-        this.minimapdog.displayOriginX = 1000;
-        this.minimapdog.displayOriginY = 775;
-        console.log(this.minimapdog);
+        this.minimapdog.x = 925 + ((this.myGame.player.x * 368)/ 30000);
     }
 }

@@ -153,20 +153,14 @@ export default class Pause extends Phaser.Scene {
           this.sound.play('correct', {volume: 0.6, loop: false});
           this.tick.play('tick_blink', false);
           if (this.enemy === "boulder"){
-            let block2destroy = this.myGame.blockers.getFirst(true);
-            block2destroy.destroy();
+            this.block2destroy = this.myGame.blockers.getFirst(true);
+            this.block2destroy.destroy();
           }
           else if (this.enemy === "snake"){
-            let block2destroy = this.myGame.snakes.getFirst(true);
-            block2destroy.SnakeDie();
-            block2destroy.body.checkCollision.none = true;
-            this.prueba = block2destroy;
-      
-            self.time.delayedCall(1000, function(){
-              console.log("block2destroy");
-              self.prueba.destroy();
-            }, null, self); //doesnt work
-            //block2destroy.destroy();
+            this.block2destroy = this.myGame.snakes.getFirst(true);
+            this.block2destroy.SnakeDie(this.myGame);
+            this.block2destroy.body.checkCollision.none = true;
+            this.myGame.snakeCanDie = true;
           }
           this.myGame.player.move = true;
           this.scene.stop();
@@ -176,7 +170,7 @@ export default class Pause extends Phaser.Scene {
           if (this.enemy === "snake"){
             this.myInfo.lives--;
             
-            this.snake.SnakeAttack();
+            this.snake.SnakeAttack(this.myGame);
             this.time.delayedCall(1000, function(){
               this.snake.SnakeIdle(); //does work
             }, null, this);

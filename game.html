@@ -42,6 +42,7 @@
         import CharSel from './stuff/js/charse.js';
         import Type from './stuff/js/typing.js';
         import PlayerInfo from './stuff/js/PlayerInfo.js';
+        import CharDeath from './stuff/js/charDeath.js';
         var config = {
             type: Phaser.AUTO,
             width: 1400,
@@ -54,8 +55,8 @@
                 mode: Phaser.Scale.FIT,
                 autoCenter: Phaser.Scale.CENTER_BOTH
             },
-            scene: [ TitleScreen, Menu, Game, HowToPlay, CharSel, Type, PlayerInfo, Pause],
-            physics: { default: 'arcade', arcade: { gravity: { y: 1000 }, debug: true } }
+            scene: [ TitleScreen, Menu, Game, HowToPlay, CharSel, Type, PlayerInfo, Pause, CharDeath],
+            physics: { default: 'arcade', arcade: { gravity: { y: 1200 }, debug: true } }
         };
         new Phaser.Game(config);
     </script>

@@ -48,11 +48,14 @@ export default class Snake extends Blocker{
         this.state = 0;
     }
 
-    SnakeDie(){
+    SnakeDie(Game){
+        Game.sound.play('snake_dies', {volume: 0.6, loop: false});
         this.state = 2;
     }
 
-    SnakeAttack(){
+    SnakeAttack(Game){
         this.state = 1;
+        Game.sound.play('snake_attacks', {volume: 0.6, loop: false});
+
     }
 }

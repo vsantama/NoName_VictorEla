@@ -47,6 +47,7 @@ export default class Game extends Phaser.Scene {
     let m = Math.random() * (5 - 0) + 0;
     this.cont = 0;
     this.potion = false;
+    this.snakeCanDie = false;
    //BACKGROUND
    this.clouds = this.add.tileSprite(0, 400, 60000, 800, "clouds");
    this.sea = this.add.tileSprite(0, 400, 60000, 800, 'sea');
@@ -199,6 +200,15 @@ export default class Game extends Phaser.Scene {
   }
 
   update(time, delta) {
+    ///SNAKE DEATH
+    if (this.snakeCanDie){
+      this.time.delayedCall(1000, function(){
+        this.snakes.getFirst(true).destroy();
+        }, null, this); 
+
+        this.snakeCanDie = false;
+    }
+    //KEYBOARD INPUT
     if(this.cursors.left.isDown  || this.cursors.right.isDown || (this.cursors.space.isDown || this.cursors.up.isDown)){
 
       this.infoEmitter.emit('dogUpdate');
@@ -273,10 +283,8 @@ export default class Game extends Phaser.Scene {
         switch(block.state){
           case 0: block.play("snake_idle", true); break; 
           case 1: 
-            //this.sound.play('snake_attacks', {volume: 0.6, loop: false});
             block.anims.play("snake_attack", true); break;
           case 2: 
-            //this.sound.play('snake_dies', {volume: 0.6, loop: false});
             block.anims.play("snake_die", true); break;
          }
        
@@ -288,6 +296,6 @@ export default class Game extends Phaser.Scene {
       this.scene.stop("pinfo");
       this.scene.stop("typing");
       this.scene.stop();
-      this.scene.start('menu', {music: false, lock: this.lock, char: this.char});
+      this.scene.start('deathScene', {lock: this.lock, char: this.char});
     }
 }
