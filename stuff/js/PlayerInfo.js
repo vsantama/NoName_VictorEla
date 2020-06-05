@@ -26,6 +26,7 @@ export default class PlayerInfo extends Phaser.Scene {
         this.load.image('potion', './stuff/img/Assets/Sprites/potion_single.png');
         this.load.image('finn',  './stuff/img/Assets/Sprites/characters_enemies/finn.png');
         this.load.image('heart', './stuff/img/Assets/Sprites/heart.png');
+        this.load.audio('potion', './stuff/img/Assets/Sounds/Sound_FX/potion.mp3');
     }
     
     create(){
@@ -76,6 +77,7 @@ export default class PlayerInfo extends Phaser.Scene {
     }
 
     deletePotion(){
+        this.sound.play('potion', {volume: 0.6, loop: false});
         this.potion.setVisible(false);
         this.potion.visible = false;
     }

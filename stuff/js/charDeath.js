@@ -13,7 +13,7 @@ export default class charDeath extends Phaser.Scene {
         this.load.spritesheet('tryagain', './stuff/img/Assets/TitleScreenAndSprites/Buttons/tryagain_dark.png', {frameWidth:118, frameHeight:16});
         this.load.spritesheet('back2menu', './stuff/img/Assets/TitleScreenAndSprites/Buttons/back2menu_dark.png', {frameWidth:111, frameHeight:12});
         this.load.image('youdied', './stuff/img/Assets/TitleScreenAndSprites/Buttons/youdied.png');
-        this.load.image('sign', './stuff/img/Assets/Sprites/woodframe_dark.png');
+        this.load.image('sign_dark', './stuff/img/Assets/Sprites/woodframe_dark.png');
         this.load.audio('transition', './stuff/img/Assets/Sounds/Sound_FX/choose_menu_general_sound_3.mp3');
     }
     
@@ -27,7 +27,7 @@ export default class charDeath extends Phaser.Scene {
                })
           });
         
-        var sign = this.add.image(700,400, 'sign');
+        var sign = this.add.image(700,400, 'sign_dark');
         sign.setScale(13.5);
         var youdied = this.add.image(700, 150, 'youdied');
         youdied.setScale(6);
@@ -66,7 +66,7 @@ export default class charDeath extends Phaser.Scene {
 
         buttontry.on("pointerup", ()=>{
             buttontry.setFrame(1);
-            this.scene.start('game', {char: this.char, lock: this.lock});
+            this.scene.start('game', {char: this.char, lock: this.lock, dif: "easy"});
         })
     }
 

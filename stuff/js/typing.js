@@ -100,8 +100,22 @@ export default class Pause extends Phaser.Scene {
     else if (this.dif == 'hard'){
       this.word = this.hardWords[Math.floor(this.getRandomArbitrary(0, 83))];
     }
-    this.wordtext = this.add.text(625,100, this.word, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' , color: '#000', fontSize: '60px'});
-    this.wordtext.alpha = 0;
+    this.wordletters = this.word.split("");
+    this.oddletters = this.word.split("");
+    this.evenletters = this.word.split("");
+    var i;
+    for (i = 0; i < this.word.length; i++){
+      if (i%2 === 0){
+        this.oddletters.splice(i, 1, "_");
+      }
+      else{
+        this.evenletters.splice(i, 1, "_");
+      }
+    }
+    this.wordtext1 = this.add.text(625,100, this.oddletters.join(""), { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' , color: '#000', fontSize: '60px'});
+    this.wordtext2 = this.add.text(625,100, this.evenletters.join(""), { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' , color: '#000', fontSize: '60px'});
+    this.wordtext1.alpha = 0;
+    this.wordtext2.alpha = 1;
     this.usertextarray = this.add.text(625,200, this.usertext.join(""), { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' , color: '#000', fontSize: '60px'});
 
      
@@ -123,6 +137,7 @@ export default class Pause extends Phaser.Scene {
             this.usertext.splice(this.usertext.length - 1, 1);
           }
           else{
+            console.log(this.word);
             this.usertext.push(event.key);}
       }
       this.usertextarray.setText(this.usertext.join(""));
@@ -137,10 +152,16 @@ export default class Pause extends Phaser.Scene {
       ///
       
       ///
-      if(this.wordtext !== undefined){
-        if(time - this.oldtime > 900){
-          if (this.wordtext.alpha === 1) this.wordtext.alpha = 0;
-          else if ((this.wordtext.alpha === 0)) this.wordtext.alpha = 1;
+      if(this.wordtext1 !== undefined || this.wordtext2 !== undefined){
+        if(time - this.oldtime > 750){
+          if (this.wordtext1.alpha === 1){
+            this.wordtext1.alpha = 0;
+            this.wordtext2.alpha = 1;
+          } 
+          else if ((this.wordtext1.alpha === 0)){
+            this.wordtext1.alpha = 1;
+            this.wordtext2.alpha = 0;
+          } 
           this.oldtime = time;
         }
       }
