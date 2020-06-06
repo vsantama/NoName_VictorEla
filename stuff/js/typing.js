@@ -114,8 +114,8 @@ export default class Pause extends Phaser.Scene {
     }
     this.wordtext1 = this.add.text(625,100, this.oddletters.join(""), { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' , color: '#000', fontSize: '60px'});
     this.wordtext2 = this.add.text(625,100, this.evenletters.join(""), { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' , color: '#000', fontSize: '60px'});
-    this.wordtext1.alpha = 0;
-    this.wordtext2.alpha = 1;
+    this.wordtext1.alpha = 1;
+    this.wordtext2.alpha = 0;
     this.usertextarray = this.add.text(625,200, this.usertext.join(""), { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' , color: '#000', fontSize: '60px'});
 
      
@@ -131,13 +131,13 @@ export default class Pause extends Phaser.Scene {
         && event.key !== "AltGraph"  
         && event.key !== "ArrowDown"  
         && event.key !== "ArrowUp"  
+        && event.key !== " "
         && event.key !== "Escape"  
         && event.key !== "Alt"){
           if (event.key === "Backspace"){
             this.usertext.splice(this.usertext.length - 1, 1);
           }
           else{
-            console.log(this.word);
             this.usertext.push(event.key);}
       }
       this.usertextarray.setText(this.usertext.join(""));

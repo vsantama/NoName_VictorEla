@@ -19,6 +19,11 @@ export default class PlayerInfo extends Phaser.Scene {
         if (data && data.emitter){
             data.emitter.on('dogUpdate', this.updateDogX, this);
         }
+
+        if (data && data.emitter){
+            data.emitter.on('sharkUpdate', this.updateSharkX, this);
+        }
+
     }
 
     preload(){
@@ -51,6 +56,9 @@ export default class PlayerInfo extends Phaser.Scene {
     //change 925 to wherever dog is
     this.minimapdog = this.add.image(925, 770, 'heart').setDepth(3);
     this.minimapdog.setScale(0.5);
+    //
+    this.minimapshark = this.add.image(932, 767, 'finn').setDepth(3);
+    this.minimapshark.setScale(0.5);
     }
 
     update(time, delta){
@@ -84,5 +92,13 @@ export default class PlayerInfo extends Phaser.Scene {
 
     updateDogX(){
         this.minimapdog.x = 925 + ((this.myGame.player.x * 368)/ 30000);
+        
+        
+
     }
+
+    updateSharkX(){
+        this.minimapshark.x = 925 + ((this.myGame.shark.x * 368)/ 30000);
+    }
+    
 }

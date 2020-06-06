@@ -9,6 +9,7 @@ export default class Shiba extends Player{
         Scene.add.existing(this);
         this.myGame = Scene;
         this.move = true;
+        this.speed = 400;
         
           Scene.anims.create({
             key: 'run',

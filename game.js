@@ -8,6 +8,7 @@ import Heart from './stuff/js/Heart.js';
 import Potion from "./stuff/js/Potion.js";
 import Player from "./stuff/js/Player.js";
 import Shiba from "./stuff/js/Shiba.js";
+import Shark from "./stuff/js/Shark.js";
 
 export default class Game extends Phaser.Scene {
   constructor() {
@@ -24,10 +25,13 @@ export default class Game extends Phaser.Scene {
     this.load.image('sand', './stuff/img/Assets/Backgrounds/sand.png');
     this.load.image('sea', './stuff/img/Assets/Backgrounds/sea.png');
     this.load.image('sandtiles', './stuff/img/Assets/map/beach_tiles_64x32.png');
+    this.load.image('extrarocks', './stuff/img/Assets/map/beach_tiles_64x32_2.png');
     this.load.tilemapTiledJSON('beach_light', './stuff/img/Assets/map/beach_light.json');
     this.load.audio('jump', './stuff/img/Assets/Sounds/Sound_FX/jump.mp3');
     this.load.audio('pickup', './stuff/img/Assets/Sounds/Sound_FX/random_generic_cute_sound.mp3');
+    this.load.audio('potion_sound', './stuff/img/Assets/Sounds/Sound_FX/potion.mp3');
     this.load.audio('pausegame', './stuff/img/Assets/Sounds/Sound_FX/pause_game_2.mp3');
+    this.load.audio('punch', './stuff/img/Assets/Sounds/Sound_FX/punch.mp3');
     CopperBoulder.preloadBoulder(this);
     SilverBoulder.preloadBoulder(this);
     GoldBoulder.preloadBoulder(this);
@@ -35,6 +39,7 @@ export default class Game extends Phaser.Scene {
     Heart.preloadHeart(this);
     Potion.preloadPotion(this);
     Shiba.preloadShiba(this);
+    Shark.preloadShark(this);
   }
 
   getRandomArbitrary(min, max) {
@@ -60,21 +65,26 @@ export default class Game extends Phaser.Scene {
     tileHeight: 32
   });
   this.map.addTilesetImage('beach_tiles_64x32',  'sandtiles');
-  this.groundLayer = this.map.createStaticLayer('ground', 'beach_tiles_64x32');
+  this.map.addTilesetImage('beach_tiles_64x32_2',  'extrarocks');
+  this.groundLayer = this.map.createStaticLayer('ground', ['beach_tiles_64x32', 'beach_tiles_64x32_2']);
   this.groundLayer.setCollisionByExclusion(-1, true);
 
    //PLAYER                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-   this.player = new Shiba (this, 100, 500);
-   this.physics.add.existing(this.player).setDepth(3);;
+   this.player = new Shiba (this, 600, 500);
+   this.physics.add.existing(this.player).setDepth(3);
    this.physics.add.collider(this.player, this.groundLayer);
    
+   //SHARK
+  this.shark = new Shark (this, 50, 460).setScale(1.2);
+  this.physics.add.existing(this.shark).setDepth(3);
+  this.shark.body.setAllowGravity(false);
+
    //COLLLISION GROUPS
    this.powerups = this.physics.add.staticGroup();
    this.blockers = this.physics.add.staticGroup(); 
    this.snakes = this.physics.add.staticGroup();
    this.physics.add.collider(this.snakes, this.groundLayer);
    this.snakes.classType = Phaser.Physics.Arcade.Sprite;
-
 
    //CREATION OF POWERUPS
    var oz = Math.round(Math.random());
@@ -99,12 +109,11 @@ export default class Game extends Phaser.Scene {
    var n = 5;
    for (i = 0; i < n; i++){
      if (i === 0){
-      let firstcop = new CopperBoulder(this, this.getRandomArbitrary(250, (10000/n)*(i+1)), 570);
+      let firstcop = new CopperBoulder(this, this.getRandomArbitrary(1000, (10000/n)*(i+1)), 570);
       this.blockers.add(firstcop);
      }
      else if (i===2){
-      let snake_e = new Snake(this, 300, 470);
-      //let snake_e = new Snake(this, this.getRandomArbitrary((10000/n)*i, (10000/n)*(i+1)), 470);
+      let snake_e = new Snake(this, this.getRandomArbitrary((10000/n)*i, (10000/n)*(i+1)), 470);
       snake_e.setScale(4);
       this.snakes.add(snake_e);
      }
@@ -114,7 +123,7 @@ export default class Game extends Phaser.Scene {
      }
   }
   for (i = 0; i < n; i++){
-    if (i===2){
+    if (i===2 || i ===3){
       let snake_m = new Snake(this, this.getRandomArbitrary(10000 + (10000/n)*i, 10000 + (10000/n)*(i+1)), 470);
       snake_m.setScale(4);
       this.snakes.add(snake_m);
@@ -130,7 +139,7 @@ export default class Game extends Phaser.Scene {
       let lastgol = new GoldBoulder(this, this.getRandomArbitrary(20000 + ((10000/n)*i), 29900), 570);
       this.blockers.add(lastgol);
      }
-    else if (i===2){
+    else if (i===1 || i===3){
       let snake_h = new Snake(this, this.getRandomArbitrary(20000 + (10000/n)*i, 20000 + (10000/n)*(i+1)), 470);
       snake_h.setScale(4);
       this.snakes.add(snake_h);
@@ -141,13 +150,10 @@ export default class Game extends Phaser.Scene {
     }
   }
    ////////////////////////////////////////////////////////////////////////////////
-  //console.log(this.blockers.getChildren());
-  //console.log(this.snakes.getChildren());
-
+   this.infoEmitter = new Phaser.Events.EventEmitter();
   //COLLISIONS
   this.physics.add.collider(this.player, this.blockers, function(player, blocker){
     this.launched = false;
-    console.log("potion " + player.myGame.potion);
     switch(blocker.name){
       case "copper": player.myGame.dif = "easy"; break;
       case "silver": player.myGame.dif = "medium"; break;
@@ -166,7 +172,11 @@ export default class Game extends Phaser.Scene {
       player.move = false;
     }
   });
-  this.infoEmitter = new Phaser.Events.EventEmitter();
+
+  this.physics.add.collider(this.player, this.shark, function(player, shark){
+    player.myGame.sound.play('punch', {volume: 0.3, loop: false});
+    player.myGame.playerDie();
+  });
 
   //OVERLAPS
   this.physics.add.overlap(this.player, this.powerups, function(player, powerup){
@@ -181,7 +191,6 @@ export default class Game extends Phaser.Scene {
     }
   });
    
-  
    
    this.player.play("idle");
    this.myCam = this.cameras.main;
@@ -200,6 +209,18 @@ export default class Game extends Phaser.Scene {
   }
 
   update(time, delta) {
+    
+    if (this.shark.move) this.infoEmitter.emit('sharkUpdate');
+
+    if (this.shark.move === false){
+      this.shark.play("shark_run");
+      this.time.delayedCall(2000, function(){
+        this.shark.move = true;
+        this.shark.body.setVelocityX(this.shark.speed);
+        }, null, this); 
+    }
+    
+
     ///SNAKE DEATH
     if (this.snakeCanDie){
       this.time.delayedCall(1000, function(){
@@ -210,14 +231,14 @@ export default class Game extends Phaser.Scene {
     }
     //KEYBOARD INPUT
     if(this.cursors.left.isDown  || this.cursors.right.isDown || (this.cursors.space.isDown || this.cursors.up.isDown)){
-
+      
       this.infoEmitter.emit('dogUpdate');
 
       if (this.cursors.left.isDown && this.player.x > 55){ 
         if(this.player.move == true){
           this.player.play("run_flip", true);
         this.direction = 'left';   
-        this.player.body.setVelocityX(-400);
+        this.player.body.setVelocityX(-this.player.speed);
         this.player.scaleX = 1;
         this.clouds.tilePositionX -= 0.5;
         this.sea.tilePositionX -= 1;
@@ -228,7 +249,7 @@ export default class Game extends Phaser.Scene {
         if(this.player.move == true){
           this.player.play("run", true);   
           this.direction = 'right';
-          this.player.body.setVelocityX(400);
+          this.player.body.setVelocityX(this.player.speed);
         if (this.player.x < 1000){
           this.clouds.tilePositionX += 0.5;
           this.sea.tilePositionX += 1;
@@ -247,7 +268,6 @@ export default class Game extends Phaser.Scene {
         if(this.player.move == true){
           this.sound.play('jump', {volume: 0.4, loop: false});
           this.player.body.setVelocityY(-400);
-          console.log(this.dif);
           if (this.direction == 'right')  this.player.play('jump', true);
           else this.player.play('jump_flip', true);
         }
@@ -273,8 +293,15 @@ export default class Game extends Phaser.Scene {
     if (this.cursors.space.isDown){
       if (this.potion){
         this.potion = false;
+        this.sound.play('potion_sound', {volume: 0.3, loop: false});
         this.infoEmitter.emit('deletePotion');
-        //make shark stop for a little bit
+        this.shark.body.setVelocityX(0);
+        this.shark.anims.pause();
+        this.time.delayedCall(3000, function(){
+          console.log("potion");
+          this.shark.play("shark_run");
+          this.shark.body.setVelocityX(this.shark.speed);
+        }, null, this); 
       }
     }
  
@@ -289,6 +316,14 @@ export default class Game extends Phaser.Scene {
          }
        
       });
+
+      if (this.player.x >= 29800){
+      this.scene.stop("pause");
+      this.scene.stop("pinfo");
+      this.scene.stop("typing");
+      this.scene.stop();
+      this.scene.start('winScene', {lock: this.lock, char: this.char});
+      }
     }   
     
     playerDie(){
