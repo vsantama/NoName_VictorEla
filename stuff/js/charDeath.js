@@ -15,9 +15,15 @@ export default class charDeath extends Phaser.Scene {
         this.load.image('youdied', './stuff/img/Assets/TitleScreenAndSprites/Buttons/youdied.png');
         this.load.image('sign_dark', './stuff/img/Assets/Sprites/woodframe_dark.png');
         this.load.audio('transition', './stuff/img/Assets/Sounds/Sound_FX/choose_menu_general_sound_3.mp3');
+        this.load.audio('sadmusic', './stuff/img/Assets/Sounds/Music/death_music.mp3');
     }
     
     create(){
+
+    this.music = this.sound.add('sadmusic');
+    this.music.play({volume: 0.6, loop: true});
+    this.music.pauseOnBlur = false;
+
         this.anims.create({
             key: 'animation',
             frameRate: 4,
@@ -43,7 +49,7 @@ export default class charDeath extends Phaser.Scene {
 
         buttonback.on("pointerover", ()=>{
             buttonback.setFrame(1);
-            this.sound.play('transition', {volume: 0.6, loop: false});
+            this.sound.play('transition', {volume: 0.4, loop: false});
         })
 
         buttonback.on("pointerout", ()=>{
@@ -52,6 +58,7 @@ export default class charDeath extends Phaser.Scene {
 
         buttonback.on("pointerup", ()=>{
             buttonback.setFrame(1);
+            this.music.stop();
             this.scene.start('menu', {music: false, char: this.char, lock: this.lock});
         })
 
@@ -66,6 +73,7 @@ export default class charDeath extends Phaser.Scene {
 
         buttontry.on("pointerup", ()=>{
             buttontry.setFrame(1);
+            this.music.stop();
             this.scene.start('game', {char: this.char, lock: this.lock, dif: "easy"});
         })
     }

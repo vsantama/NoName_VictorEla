@@ -40,6 +40,7 @@ export default class Menu extends Phaser.Scene {
         buttonplay.setInteractive();
 
         buttonplay.on("pointerover", ()=>{
+            console.log(this.char);
             buttonplay.setFrame(1);
             this.sound.play('transition', {volume: 0.6, loop: false});
         })
@@ -51,8 +52,7 @@ export default class Menu extends Phaser.Scene {
         buttonplay.on("pointerup", ()=>{
             buttonplay.setFrame(1);
             this.music.stop();
-            //falta pasar los parámetros del init del game
-            this.scene.start('game', {lock: this.lock, char: this.char, dif: "easy"});
+            this.scene.start('game', {lock: this.lock, char: this.char, dif: "easy", go: false});
         })
         //add lock and char parametres
         var buttonhow = this.add.sprite(700, 600, 'howto', );

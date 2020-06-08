@@ -2,7 +2,6 @@ export default class PlayerInfo extends Phaser.Scene {
     constructor(){
         super({key: 'pinfo'});
     }
-    //https://vimeo.com/362892218 19:50
     init (data){
         if (data && data.emitter){
             data.emitter.on('heart_pickup', this.updateLives, this);
@@ -23,7 +22,7 @@ export default class PlayerInfo extends Phaser.Scene {
         if (data && data.emitter){
             data.emitter.on('sharkUpdate', this.updateSharkX, this);
         }
-
+        this.char = data.char;
     }
 
     preload(){
@@ -42,7 +41,13 @@ export default class PlayerInfo extends Phaser.Scene {
     this.potion.setVisible(false);
     this.potion.visible = false;
     //PLAYER'S LIFE
-    this.lives = 3;
+    if (this.char === "shiba"){
+        this.lives = 3;
+    }
+    else{
+        this.lives = 2;
+    }
+    
     this.life = this.add.sprite(150, 80, "life");
     //MINIMAP
     this.minimapbar = new Phaser.GameObjects.Graphics(this);

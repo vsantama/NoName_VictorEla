@@ -8,6 +8,7 @@ import Heart from './stuff/js/Heart.js';
 import Potion from "./stuff/js/Potion.js";
 import Player from "./stuff/js/Player.js";
 import Shiba from "./stuff/js/Shiba.js";
+import Ger from "./stuff/js/GerShep.js";
 import Shark from "./stuff/js/Shark.js";
 
 export default class Game extends Phaser.Scene {
@@ -19,6 +20,7 @@ export default class Game extends Phaser.Scene {
     this.char = data.char;
     this.dif = data.dif;
     this.lock = data.lock;
+    this.go = data.go;
   }
   preload() {  
     this.load.image('clouds', './stuff/img/Assets/Backgrounds/clouds.png');
@@ -32,13 +34,21 @@ export default class Game extends Phaser.Scene {
     this.load.audio('potion_sound', './stuff/img/Assets/Sounds/Sound_FX/potion.mp3');
     this.load.audio('pausegame', './stuff/img/Assets/Sounds/Sound_FX/pause_game_2.mp3');
     this.load.audio('punch', './stuff/img/Assets/Sounds/Sound_FX/punch.mp3');
+    this.load.audio('music', './stuff/img/Assets/Sounds/Music/darude_kalimba.wav');
     CopperBoulder.preloadBoulder(this);
     SilverBoulder.preloadBoulder(this);
     GoldBoulder.preloadBoulder(this);
     Snake.preloadSnake(this);
     Heart.preloadHeart(this);
     Potion.preloadPotion(this);
-    Shiba.preloadShiba(this);
+    if (this.char === "shiba"){
+      Shiba.preloadShiba(this);
+    }
+    else if (this.char === "gershep"){
+      console.log("gershep");
+      Ger.preloadShep(this);
+    }
+    
     Shark.preloadShark(this);
   }
 
@@ -47,6 +57,10 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
+    //MUSIC
+    this.music = this.sound.add('music');
+    this.music.play({volume: 0.6, loop: true});
+    this.music.pauseOnBlur = false;
     //VARIABLES
     this.direction = 'right';
     let m = Math.random() * (5 - 0) + 0;
@@ -69,8 +83,25 @@ export default class Game extends Phaser.Scene {
   this.groundLayer = this.map.createStaticLayer('ground', ['beach_tiles_64x32', 'beach_tiles_64x32_2']);
   this.groundLayer.setCollisionByExclusion(-1, true);
 
-   //PLAYER                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-   this.player = new Shiba (this, 600, 500);
+   //PLAYER  
+   if (this.player != undefined){
+     console.log("destroyed");
+    this.player.destroy();
+   }
+  
+   if (this.char === "gershep"){
+    console.log("hello, germanshep is created");
+    this.player = new Ger (this, 600, 513);
+    this.go = true;
+  }    
+           
+   else if (this.char === "shiba"){
+    console.log("hello, shiba is created");
+    this.player = new Shiba (this, 600, 502);
+    this.char = "shiba";
+    this.go = true;
+  }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
    this.physics.add.existing(this.player).setDepth(3);
    this.physics.add.collider(this.player, this.groundLayer);
    
@@ -89,17 +120,17 @@ export default class Game extends Phaser.Scene {
    //CREATION OF POWERUPS
    var oz = Math.round(Math.random());
    switch(oz){
-    case 0: let heart = new Heart(this, this.getRandomArbitrary(7000, 13000), 330);
+    case 0: let heart = new Heart(this, this.getRandomArbitrary(7000, 13000), 365);
       heart.anims.play("heart_move", true);
       this.powerups.add(heart);
       let potion = new Potion(this, this.getRandomArbitrary(13100, 20000), 360);
       potion.anims.play("potion_move", true);
       this.powerups.add(potion);
       break;
-    case 1: let potion_ = new Potion(this, this. getRandomArbitrary(7000, 13000), 330);
+    case 1: let potion_ = new Potion(this, this. getRandomArbitrary(7000, 13000), 360);
     potion_.anims.play("potion_move", true);
     this.powerups.add(potion_);
-    let heart_ = new Heart(this, this.getRandomArbitrary(13100, 20000), 330);
+    let heart_ = new Heart(this, this.getRandomArbitrary(13100, 20000), 365);
     heart_.anims.play("heart_move", true);
     this.powerups.add(heart_);
       break;
@@ -109,7 +140,7 @@ export default class Game extends Phaser.Scene {
    var n = 5;
    for (i = 0; i < n; i++){
      if (i === 0){
-      let firstcop = new CopperBoulder(this, this.getRandomArbitrary(1000, (10000/n)*(i+1)), 570);
+      let firstcop = new CopperBoulder(this, this.getRandomArbitrary(1000, (10000/n)*(i+1)), 540);
       this.blockers.add(firstcop);
      }
      else if (i===2){
@@ -118,7 +149,7 @@ export default class Game extends Phaser.Scene {
       this.snakes.add(snake_e);
      }
      else{
-      let cop = new CopperBoulder(this, this.getRandomArbitrary((10000/n)*i, (10000/n)*(i+1)), 570);
+      let cop = new CopperBoulder(this, this.getRandomArbitrary((10000/n)*i, (10000/n)*(i+1)), 540);
       this.blockers.add(cop);
      }
   }
@@ -130,13 +161,13 @@ export default class Game extends Phaser.Scene {
 
      }
     else{
-      let sil = new SilverBoulder(this, this.getRandomArbitrary(10000 + ((10000/n)*i), 10000 + ((10000/n)*(i+1))), 570);
+      let sil = new SilverBoulder(this, this.getRandomArbitrary(10000 + ((10000/n)*i), 10000 + ((10000/n)*(i+1))), 540);
       this.blockers.add(sil);
     }
   }
   for (i = 0; i < n; i++){
     if (i===4){
-      let lastgol = new GoldBoulder(this, this.getRandomArbitrary(20000 + ((10000/n)*i), 29900), 570);
+      let lastgol = new GoldBoulder(this, this.getRandomArbitrary(20000 + ((10000/n)*i), 29900), 540);
       this.blockers.add(lastgol);
      }
     else if (i===1 || i===3){
@@ -145,7 +176,7 @@ export default class Game extends Phaser.Scene {
       this.snakes.add(snake_h);
     }
     else{
-    let gol = new GoldBoulder(this, this.getRandomArbitrary(20000 + ((10000/n)*i), 20000 + ((10000/n)*(i+1))), 570);
+    let gol = new GoldBoulder(this, this.getRandomArbitrary(20000 + ((10000/n)*i), 20000 + ((10000/n)*(i+1))), 540);
     this.blockers.add(gol);
     }
   }
@@ -204,12 +235,12 @@ export default class Game extends Phaser.Scene {
    this.escape = this.input.keyboard.addKey('ESC');
 
    //INFO SCENE
-   this.scene.launch('pinfo', {emitter: this.infoEmitter});
+   this.scene.launch('pinfo', {emitter: this.infoEmitter, char: this.char});
 
   }
 
   update(time, delta) {
-    
+    if(this.go === true){
     if (this.shark.move) this.infoEmitter.emit('sharkUpdate');
 
     if (this.shark.move === false){
@@ -229,62 +260,128 @@ export default class Game extends Phaser.Scene {
 
         this.snakeCanDie = false;
     }
-    //KEYBOARD INPUT
-    if(this.cursors.left.isDown  || this.cursors.right.isDown || (this.cursors.space.isDown || this.cursors.up.isDown)){
+    //KEYBOARD INPUT - German Shepherd
+    if (this.char === "gershep"){
+      if(this.cursors.left.isDown  || this.cursors.right.isDown || (this.cursors.space.isDown || this.cursors.up.isDown)){
       
-      this.infoEmitter.emit('dogUpdate');
-
-      if (this.cursors.left.isDown && this.player.x > 55){ 
-        if(this.player.move == true){
-          this.player.play("run_flip", true);
-        this.direction = 'left';   
-        this.player.body.setVelocityX(-this.player.speed);
-        this.player.scaleX = 1;
-        this.clouds.tilePositionX -= 0.5;
-        this.sea.tilePositionX -= 1;
-        this.sand.tilePositionX -= 2; 
+        this.infoEmitter.emit('dogUpdate');
+  
+        if (this.cursors.left.isDown && this.player.x > 55){ 
+          if(this.player.move == true){
+            this.player.play("grun_flip", true);
+          this.direction = 'left';   
+          this.player.body.setVelocityX(-this.player.speed);
+          this.player.scaleX = 1;
+          this.clouds.tilePositionX -= 0.5;
+          this.sea.tilePositionX -= 1;
+          this.sand.tilePositionX -= 2; 
+          } 
+      
+        } else if (this.cursors.right.isDown) {
+          if(this.player.move == true){
+            this.player.play("grun", true);   
+            this.direction = 'right';
+            this.player.body.setVelocityX(this.player.speed);
+          if (this.player.x < 1000){
+            this.clouds.tilePositionX += 0.5;
+            this.sea.tilePositionX += 1;
+            this.sand.tilePositionX += 2; 
+            this.player.scaleX = 1; 
+        }
+          else{
+          this.player.scaleX = 1;
+          this.clouds.tilePositionX += 0.8;
+          this.sea.tilePositionX += 1.5;
+          this.sand.tilePositionX += 3; 
+          }
+          }
         } 
-    
-      } else if (this.cursors.right.isDown) {
-        if(this.player.move == true){
-          this.player.play("run", true);   
-          this.direction = 'right';
-          this.player.body.setVelocityX(this.player.speed);
-        if (this.player.x < 1000){
-          this.clouds.tilePositionX += 0.5;
-          this.sea.tilePositionX += 1;
-          this.sand.tilePositionX += 2; 
-          this.player.scaleX = 1; 
+         if (this.cursors.up.isDown && this.player.body.onFloor()){
+          if(this.player.move == true){
+            this.sound.play('jump', {volume: 0.4, loop: false});
+            this.player.body.setVelocityY(-400);
+            if (this.direction == 'right')  this.player.play('gjump', true);
+            else this.player.play('gjump_flip', true);
+          }
+         }
+  
       }
-        else{
-        this.player.scaleX = 1;
-        this.clouds.tilePositionX += 0.8;
-        this.sea.tilePositionX += 1.5;
-        this.sand.tilePositionX += 3; 
-        }
-        }
-      } 
-       if (this.cursors.up.isDown && this.player.body.onFloor()){
-        if(this.player.move == true){
-          this.sound.play('jump', {volume: 0.4, loop: false});
-          this.player.body.setVelocityY(-400);
-          if (this.direction == 'right')  this.player.play('jump', true);
-          else this.player.play('jump_flip', true);
+      
+  
+       else{
+        this.player.body.setVelocityX(0);
+        if (this.player.body.onFloor()) {
+          if (this.direction == 'right') this.player.play('gidle', true);
+          else this.player.play('gidle_flip', true);
         }
        }
-
-    }
-    
-
-     else{
-      this.player.body.setVelocityX(0);
-      if (this.player.body.onFloor()) {
-        if (this.direction == 'right') this.player.play('idle', true);
-        else this.player.play('idle_flip', true);
-      }
      }
+     /////////////////////////////////////////////
+     //KEYBOARD INPUT - Shiba
+     if (this.char === "shiba"){
+      if(this.cursors.left.isDown  || this.cursors.right.isDown || (this.cursors.space.isDown || this.cursors.up.isDown)){
+      
+        this.infoEmitter.emit('dogUpdate');
+  
+        if (this.cursors.left.isDown && this.player.x > 55){ 
+          if(this.player.move == true){
+            this.player.play("run_flip", true);
+          this.direction = 'left';   
+          this.player.body.setVelocityX(-this.player.speed);
+          this.player.scaleX = 1;
+      
+            this.clouds.tilePositionX -= 0.5;
+            this.sea.tilePositionX -= 1;
+            this.sand.tilePositionX -= 2; 
+          } 
+      
+        } else if (this.cursors.right.isDown) {
+         
+          if(this.player.move == true){
+            this.player.play("run", true);   
+            this.direction = 'right';
+            this.player.body.setVelocityX(this.player.speed);
+        
+            if (this.player.x < 1000){
+              this.clouds.tilePositionX += 0.5;
+              this.sea.tilePositionX += 1;
+              this.sand.tilePositionX += 2; 
+              this.player.scaleX = 1; 
+          }
+            else{
+            this.player.scaleX = 1;
+            this.clouds.tilePositionX += 0.8;
+            this.sea.tilePositionX += 1.5;
+            this.sand.tilePositionX += 3; 
+            }
+          
+          
+          }
+        } 
+         if (this.cursors.up.isDown && this.player.body.onFloor()){
+          if(this.player.move == true){
+            this.sound.play('jump', {volume: 0.4, loop: false});
+            this.player.body.setVelocityY(-400);
+            if (this.direction == 'right')  this.player.play('jump', true);
+            else this.player.play('jump_flip', true);
+          }
+         }
+  
+      }
+      
+  
+       else{
+        this.player.body.setVelocityX(0);
+        if (this.player.body.onFloor()) {
+          if (this.direction == 'right') this.player.play('idle', true);
+          else this.player.play('idle_flip', true);
+        }
+       }
+     }
+     //////////////////////////////////////////////
      //wont go if pressed once after pausing before
      if (Phaser.Input.Keyboard.JustDown(this.escape)){
+       console.log("escape");
       this.sound.play('pausegame', {volume: 0.3, loop: false});
       this.scene.pause('game');
       this.scene.launch('pause', {lock: this.lock, char: this.char});
@@ -318,18 +415,22 @@ export default class Game extends Phaser.Scene {
       });
 
       if (this.player.x >= 29800){
+     
       this.scene.stop("pause");
       this.scene.stop("pinfo");
       this.scene.stop("typing");
+      this.music.stop();
       this.scene.stop();
       this.scene.start('winScene', {lock: this.lock, char: this.char});
-      }
+      }}
     }   
     
     playerDie(){
+      
       this.scene.stop("pause");
       this.scene.stop("pinfo");
       this.scene.stop("typing");
+      this.music.stop();
       this.scene.stop();
       this.scene.start('deathScene', {lock: this.lock, char: this.char});
     }

@@ -23,6 +23,8 @@ export default class Pause extends Phaser.Scene {
         this.veil.fillRect(0, 0, 1400, 800);
         this.veil.setScrollFactor(0);
 
+        this.myGame = this.scene.get('game');
+
         var sign = this.add.image(700,400, 'sign');
         sign.setScale(12);
         var paus = this.add.image(700, 200, 'paused');
@@ -49,7 +51,7 @@ export default class Pause extends Phaser.Scene {
             buttonback.setFrame(1);
             this.scene.stop("game");
             this.scene.stop("pinfo");
-            this.scene.stop("typing");
+            this.scene.stop("typing");this.myGame.music.stop();
             this.scene.stop();
             this.scene.start('menu', {music: false, lock: this.lock, char: this.char});
         })
