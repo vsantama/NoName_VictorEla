@@ -74,7 +74,7 @@ export default class CharSel extends Phaser.Scene {
         this.shibaname = this.add.sprite(445,580, 'ken');
         this.shibaname.setScale(4);
 
-        this.gername = this.add.sprite(900,580, 'tazo');
+        this.gername = this.add.sprite(880,580, 'tazo');
         this.gername.setScale(4);
 
         var locked = this.add.image(900, 580, 'locked');

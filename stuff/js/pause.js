@@ -5,7 +5,6 @@ export default class Pause extends Phaser.Scene {
 
     init (data){
         this.lock = data.lock;
-        //must add char value when going to menu
         this.char = data.char;
     }
 

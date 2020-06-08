@@ -57,16 +57,7 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
-    //MUSIC
-    this.music = this.sound.add('music');
-    this.music.play({volume: 0.6, loop: true});
-    this.music.pauseOnBlur = false;
-    //VARIABLES
-    this.direction = 'right';
-    let m = Math.random() * (5 - 0) + 0;
-    this.cont = 0;
-    this.potion = false;
-    this.snakeCanDie = false;
+    
    //BACKGROUND
    this.clouds = this.add.tileSprite(0, 400, 60000, 800, "clouds");
    this.sea = this.add.tileSprite(0, 400, 60000, 800, 'sea');
@@ -85,12 +76,10 @@ export default class Game extends Phaser.Scene {
 
    //PLAYER  
    if (this.player != undefined){
-     console.log("destroyed");
     this.player.destroy();
    }
   
    if (this.char === "gershep"){
-    console.log("hello, germanshep is created");
     this.player = new Ger (this, 600, 513);
     this.go = true;
   }    
@@ -104,6 +93,17 @@ export default class Game extends Phaser.Scene {
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
    this.physics.add.existing(this.player).setDepth(3);
    this.physics.add.collider(this.player, this.groundLayer);
+
+   //MUSIC
+   this.music = this.sound.add('music');
+   this.music.play({volume: 0.6, loop: true});
+   this.music.pauseOnBlur = false;
+   //VARIABLES
+   this.direction = 'right';
+   let m = Math.random() * (5 - 0) + 0;
+   this.cont = 0;
+   this.potion = false;
+   this.snakeCanDie = false;
    
    //SHARK
   this.shark = new Shark (this, 50, 460).setScale(1.2);
