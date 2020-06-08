@@ -64,7 +64,7 @@ export default class Pause extends Phaser.Scene {
     });
    
     //Word groups. 84 words in each group
-    this.easyWords = ['act','bay','cut','dry','era','few','gym','hit','hot','ice','job','kid','log','may','new','one','pro',
+    this.easyWords = ['act','bay','gauge','dry','era','seldom','gym','hit','hot','ice','job','kid','log','may','new','one','pro',
     'red','when','tea','use','blog','boat','crew','data','diner','eyes','else','film',
     'feed','feet','gold','grew','hall','hill','into','iron','join','jump','king','knew','know','lion','like','moon','menu',
     'none','note','null','over','open','post','pool','tiny','tips','user','upon','visa',
@@ -78,12 +78,12 @@ export default class Pause extends Phaser.Scene {
     'sports','formula','initial','massive','located','tigers','picture','plastic','related','regular','language','twitter',
     'vintage','website','gravity','heating','soldier','skating','stating','vanilla','chocolate','coconut','cream','balloon',
     'bananas','aquatic','caption','needles', 'painting', 'sharpen','backpack']
-    this.hardWords = ['acceptable','acquire','amateur','believe','conscience','column','conscious','definitely','drunkenness',
-    'embarrassment','equipment','exceed','fiery','guarantee','gauge','harass','hierarchy','humorous','ignorance','immediate',
+    this.hardWords = ['acceptable','acquire','amateur','believe','conscience','column','conscious','definitely','somewhat',
+    'embarrass','equipment','exceed','fiery','guarantee','completement','harass','hierarchy','humorous','ignorance','immediate',
     'inoculate','jewelry','judgment','leisure','license','maintenance','miniature','maneuver','misspell','neighbor','noticeable',
-    'occasionally','pastime','perseverance','pronunciation','privilege','questionnaire','receipt','recommend','rhyme','rhythm',
+    'occasionally','pastime','perseverance','psychology','privilege','questionnaire','receipt','recommend','rhyme','rhythm',
     'schedule','sergeant','threshold','twelfth','tyranny','vacuum','pharaoh','intelligence','handkerchief','necessary',
-    'hypothetically','pneumonia','abolitionism','mortgage','awareness','establish','following','frequency','ourselves','pregnancy',
+    'hypothetical','pneumonia','abolitionism','mortgage','awareness','establish','following','frequency','ourselves','pregnancy',
     'situation','somewhere','tradition','yesterday','addiction','wonderful','boyfriend','girlfriend','chemistry','mechanics',
     'objective','offensive','qualified','reactions','replacing','targeting','testament','volunteer','warehouse','workplace',
     'attractive','businesses','challenges']
