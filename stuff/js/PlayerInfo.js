@@ -81,7 +81,6 @@ export default class PlayerInfo extends Phaser.Scene {
     }
 
     updatePotion(){
-        console.log(this.potion.visible);
         if (!this.potion.visible){
             this.myGame.potion = true;
             this.potion.setVisible(true);

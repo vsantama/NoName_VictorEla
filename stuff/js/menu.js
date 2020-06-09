@@ -40,7 +40,6 @@ export default class Menu extends Phaser.Scene {
         buttonplay.setInteractive();
 
         buttonplay.on("pointerover", ()=>{
-            console.log(this.char);
             buttonplay.setFrame(1);
             this.sound.play('transition', {volume: 0.6, loop: false});
         })

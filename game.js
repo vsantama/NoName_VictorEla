@@ -75,9 +75,6 @@ export default class Game extends Phaser.Scene {
   this.groundLayer.setCollisionByExclusion(-1, true);
 
    //PLAYER  
-   if (this.player != undefined){
-    this.player.destroy();
-   }
   
    if (this.char === "gershep"){
     this.player = new Ger (this, 600, 513);
@@ -85,7 +82,6 @@ export default class Game extends Phaser.Scene {
   }    
            
    else if (this.char === "shiba"){
-    console.log("hello, shiba is created");
     this.player = new Shiba (this, 600, 502);
     this.char = "shiba";
     this.go = true;
@@ -104,6 +100,7 @@ export default class Game extends Phaser.Scene {
    this.cont = 0;
    this.potion = false;
    this.snakeCanDie = false;
+   this.bgmove = true;
    
    //SHARK
   this.shark = new Shark (this, 50, 460).setScale(1.2);
@@ -260,6 +257,12 @@ export default class Game extends Phaser.Scene {
 
         this.snakeCanDie = false;
     }
+    if (this.player.body.velocity.x === 0){
+      this.bgmove = false;
+    }
+    else{
+      this.bgmove = true;
+    }
     //KEYBOARD INPUT - German Shepherd
     if (this.char === "gershep"){
       if(this.cursors.left.isDown  || this.cursors.right.isDown || (this.cursors.space.isDown || this.cursors.up.isDown)){
@@ -272,9 +275,11 @@ export default class Game extends Phaser.Scene {
           this.direction = 'left';   
           this.player.body.setVelocityX(-this.player.speed);
           this.player.scaleX = 1;
-          this.clouds.tilePositionX -= 0.5;
-          this.sea.tilePositionX -= 1;
-          this.sand.tilePositionX -= 2; 
+          if (this.bgmove){
+            this.clouds.tilePositionX -= 0.5;
+            this.sea.tilePositionX -= 1;
+            this.sand.tilePositionX -= 2; 
+          }
           } 
       
         } else if (this.cursors.right.isDown) {
@@ -282,18 +287,20 @@ export default class Game extends Phaser.Scene {
             this.player.play("grun", true);   
             this.direction = 'right';
             this.player.body.setVelocityX(this.player.speed);
-          if (this.player.x < 1000){
-            this.clouds.tilePositionX += 0.5;
-            this.sea.tilePositionX += 1;
-            this.sand.tilePositionX += 2; 
-            this.player.scaleX = 1; 
-        }
-          else{
-          this.player.scaleX = 1;
-          this.clouds.tilePositionX += 0.8;
-          this.sea.tilePositionX += 1.5;
-          this.sand.tilePositionX += 3; 
-          }
+            if (this.bgmove){
+              if (this.player.x < 1000){
+                this.clouds.tilePositionX += 0.5;
+                this.sea.tilePositionX += 1;
+                this.sand.tilePositionX += 2; 
+                this.player.scaleX = 1; 
+            }
+              else{
+              this.player.scaleX = 1;
+              this.clouds.tilePositionX += 0.8;
+              this.sea.tilePositionX += 1.5;
+              this.sand.tilePositionX += 3; 
+              }
+            }
           }
         } 
          if (this.cursors.up.isDown && this.player.body.onFloor()){
@@ -320,7 +327,6 @@ export default class Game extends Phaser.Scene {
      //KEYBOARD INPUT - Shiba
      if (this.char === "shiba"){
       if(this.cursors.left.isDown  || this.cursors.right.isDown || (this.cursors.space.isDown || this.cursors.up.isDown)){
-      
         this.infoEmitter.emit('dogUpdate');
   
         if (this.cursors.left.isDown && this.player.x > 55){ 
@@ -329,10 +335,12 @@ export default class Game extends Phaser.Scene {
           this.direction = 'left';   
           this.player.body.setVelocityX(-this.player.speed);
           this.player.scaleX = 1;
-      
-            this.clouds.tilePositionX -= 0.5;
-            this.sea.tilePositionX -= 1;
-            this.sand.tilePositionX -= 2; 
+            if (this.bgmove){
+              this.clouds.tilePositionX -= 0.5;
+              this.sea.tilePositionX -= 1;
+              this.sand.tilePositionX -= 2; 
+            }
+            
           } 
       
         } else if (this.cursors.right.isDown) {
@@ -341,21 +349,20 @@ export default class Game extends Phaser.Scene {
             this.player.play("run", true);   
             this.direction = 'right';
             this.player.body.setVelocityX(this.player.speed);
-        
-            if (this.player.x < 1000){
-              this.clouds.tilePositionX += 0.5;
-              this.sea.tilePositionX += 1;
-              this.sand.tilePositionX += 2; 
-              this.player.scaleX = 1; 
-          }
-            else{
-            this.player.scaleX = 1;
-            this.clouds.tilePositionX += 0.8;
-            this.sea.tilePositionX += 1.5;
-            this.sand.tilePositionX += 3; 
+            if (this.bgmove){
+              if (this.player.x < 1000){
+                this.clouds.tilePositionX += 0.5;
+                this.sea.tilePositionX += 1;
+                this.sand.tilePositionX += 2; 
+                this.player.scaleX = 1; 
             }
-          
-          
+              else{
+              this.player.scaleX = 1;
+              this.clouds.tilePositionX += 0.8;
+              this.sea.tilePositionX += 1.5;
+              this.sand.tilePositionX += 3; 
+              }
+            }
           }
         } 
          if (this.cursors.up.isDown && this.player.body.onFloor()){
@@ -381,7 +388,6 @@ export default class Game extends Phaser.Scene {
      //////////////////////////////////////////////
      //wont go if pressed once after pausing before
      if (Phaser.Input.Keyboard.JustDown(this.escape)){
-       console.log("escape");
       this.sound.play('pausegame', {volume: 0.3, loop: false});
       this.scene.pause('game');
       this.scene.launch('pause', {lock: this.lock, char: this.char});
@@ -395,7 +401,6 @@ export default class Game extends Phaser.Scene {
         this.shark.body.setVelocityX(0);
         this.shark.anims.pause();
         this.time.delayedCall(3000, function(){
-          console.log("potion");
           this.shark.play("shark_run");
           this.shark.body.setVelocityX(this.shark.speed);
         }, null, this); 
