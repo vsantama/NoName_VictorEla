@@ -33,7 +33,9 @@ export default class Pause extends Phaser.Scene {
 
     //VARIABLES
     this.usertext = [];
-    this.snake = this.myGame.snakes.getFirst(true);
+    if(this.enemy === "snake"){
+      this.snake = this.myGame.snakes.getFirst(true);
+    }
 
     //FRAME
     var sign = this.add.image(700,180, 'long_sign');
