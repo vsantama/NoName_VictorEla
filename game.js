@@ -45,7 +45,6 @@ export default class Game extends Phaser.Scene {
       Shiba.preloadShiba(this);
     }
     else if (this.char === "gershep"){
-      console.log("gershep");
       Ger.preloadShep(this);
     }
     
