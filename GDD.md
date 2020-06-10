@@ -1,6 +1,6 @@
 # GDD Tibu-run
-v1.1 - by Víctor & Ela 
-April 2020
+v1.2 - by Víctor & Ela 
+June 2020
 
 ## 1. Description
 Our game is a Mario-type scroller game (that doesn't automatically scroll), where you control a character escaping a monster
@@ -11,7 +11,7 @@ The objective is to end the route without getting killed.
 
 ## 2. Scope & Target Audience
 
-Our target audience is a young audience, with an age range of 14 to 30 year old.
+Our target audience is a young audience, with an age range of 5 to 20 years old.
             
 ## 3. Game Style
 
@@ -34,7 +34,6 @@ There are no levels as such, but the background of the game changes to give a se
 ### 4.3 Characters and enemies
 
 At the beggining of the game there's a default character to play (shiba dog), there are other two unlockable characters (german shepherd and human) that can be unlocked with points from the game.
-Also, players can upload a png to use as a customized character.
 
 The main enemy is a monster following your character from the left side of the main screen. The slower you are avoiding and defeating obstacles the closer the monster gets to you, and as soon as it touches (or eats) you, you die.
 
